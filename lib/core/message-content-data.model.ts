@@ -1,5 +1,5 @@
 export interface MessageContent {
-    text?: string;
-    usage?: string;
+    text: string;
+    usage: string;
 }
 

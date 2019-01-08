@@ -1,11 +1,11 @@
 import {MasterdataHeaderData} from './masterdata-data.model';
 
 export interface ReceiverData extends ReceiverHeaderData {
-    address?: ReceiverAddressData;
+    address: ReceiverAddressData;
 }
 
 export interface ReceiverHeaderData extends MasterdataHeaderData {
-    name?: string;
+    name: string;
     nameAdd?: string;
     logoUrl?: string;
 }

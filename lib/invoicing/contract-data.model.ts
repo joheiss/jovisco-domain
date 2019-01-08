@@ -3,7 +3,7 @@ import {PaymentMethod} from './payment-method.model';
 import {BillingMethod} from './billing-method.model';
 
 export interface ContractData extends ContractHeaderData {
-    items?: ContractItemData[];
+    items: ContractItemData[];
 }
 
 export interface ContractHeaderData extends TransactionHeaderData {

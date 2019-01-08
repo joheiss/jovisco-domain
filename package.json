@@ -6,7 +6,9 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test": "jest"
+    "test": "jest",
+    "version": "npm version patch",
+    "publish": "npm publish"
   },
   "keywords": [
     "jovisco",
@@ -17,8 +19,12 @@
   "license": "ISC",
   "devDependencies": {
     "@types/jest": "^23.3.12",
+    "@types/luxon": "^1.4.1",
     "jest": "^23.6.0",
     "ts-jest": "^23.10.5",
     "typescript": "^3.2.2"
+  },
+  "dependencies": {
+    "luxon": "^1.9.0"
   }
 }
