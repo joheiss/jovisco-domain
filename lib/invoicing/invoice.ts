@@ -5,13 +5,13 @@ import {DateTime} from 'luxon';
 
 export class Invoice extends Transaction {
 
-    public static createFromData(data: InvoiceData) {
-        if (data) {
-            const header = Invoice.extractHeaderFromData(data);
-            const items = data.items ? Invoice.createItemsFromData(data.items) : [];
-            return new Invoice(header, items);
+    public static createFromData(data: InvoiceData): Invoice {
+        if (!data) {
+            throw Error('invalid input');
         }
-        return undefined;
+        const header = Invoice.extractHeaderFromData(data);
+        const items = data.items ? Invoice.createItemsFromData(data.items) : [];
+        return new Invoice(header, items);
     }
 
     protected static createItemsFromData(items: InvoiceItemData[]): InvoiceItem[] {

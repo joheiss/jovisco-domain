@@ -9,6 +9,7 @@ export * from './contract';
 export * from './invoice-status.model';
 export * from './invoice-data.model';
 export * from './invoice';
+export * from './invoicing';
 export * from './masterdata-status.model';
 export * from './masterdata-data.model';
 export * from './masterdata';

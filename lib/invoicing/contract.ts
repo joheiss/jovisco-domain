@@ -4,12 +4,12 @@ import {ContractData, ContractHeaderData, ContractItemData} from './contract-dat
 export class Contract extends Transaction {
 
     public static createFromData(data: ContractData) {
-        if (data) {
-            const header = Contract.extractHeaderFromData(data);
-            const items = data.items ? Contract.createItemsFromData(data.items) : [];
-            return new Contract(header, items);
+        if (!data) {
+            throw new Error('invalid input');
         }
-        return undefined;
+        const header = Contract.extractHeaderFromData(data);
+        const items = data.items ? Contract.createItemsFromData(data.items) : [];
+        return new Contract(header, items);
     }
 
     private static createItemsFromData(items: ContractItemData[]): ContractItem[] {
