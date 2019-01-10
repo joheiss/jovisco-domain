@@ -25,6 +25,9 @@ export class Invoice extends Transaction {
 
     protected static extractHeaderFromData(data: InvoiceData): InvoiceHeaderData {
         const {items: removed1, ...header} = data;
+        if (!header.objectType) {
+            header.objectType = 'invoices';
+        }
         if (data.issuedAt) {
             header.issuedAt = new Date(data.issuedAt);
         }

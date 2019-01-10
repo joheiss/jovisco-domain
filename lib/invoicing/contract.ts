@@ -24,6 +24,9 @@ export class Contract extends Transaction {
 
     private static extractHeaderFromData(data: ContractData): ContractHeaderData {
         const {items: removed1, ...header} = data;
+        if (!header.objectType) {
+            header.objectType = 'contracts';
+        }
         if (data.issuedAt) {
             header.issuedAt = new Date(data.issuedAt);
         }

@@ -29,6 +29,8 @@ describe('invoice tests', () => {
         console.log('invoice cash discount base amount: ', invoice.cashDiscountBaseAmount);
         console.log('invoice cash discount amount: ', invoice.cashDiscountAmount);
         console.log('invoice payment amount: ', invoice.paymentAmount);
+        console.log('invoice cash discount date: ', DateTime.fromJSDate(invoice.cashDiscountDate).toLocaleString());
+        console.log('invoice due date: ', DateTime.fromJSDate(invoice.dueDate).toLocaleString());
     });
 });
 

@@ -1,6 +1,6 @@
 {
   "name": "jovisco-domain",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "JOVISCO Domain",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -10,6 +10,10 @@
     "version": "npm version patch",
     "publish": "npm publish"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joheiss/jovisco-domain.git"
+  },
   "keywords": [
     "jovisco",
     "domain",
@@ -17,6 +21,10 @@
   ],
   "author": "Josef Heiss",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/joheiss/jovisco-domain/issues"
+  },
+  "homepage": "https://github.com/joheiss/jovisco-domain#readme",
   "devDependencies": {
     "@types/jest": "^23.3.12",
     "@types/luxon": "^1.4.1",
