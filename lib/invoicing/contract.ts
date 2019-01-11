@@ -1,5 +1,8 @@
 import {Transaction, TransactionItem} from './transaction';
 import {ContractData, ContractHeaderData, ContractItemData} from './contract-data.model';
+import {DateTime, Interval} from 'luxon';
+import {PaymentMethod} from './payment-method.model';
+import {BillingMethod} from './billing-method.model';
 
 export class Contract extends Transaction {
 
@@ -24,19 +27,60 @@ export class Contract extends Transaction {
 
     private static extractHeaderFromData(data: ContractData): ContractHeaderData {
         const {items: removed1, ...header} = data;
-        if (!header.objectType) {
-            header.objectType = 'contracts';
+        const defaultValues = Contract.defaultValues();
+        header.objectType = 'contracts';
+        if (!header.issuedAt) {
+            header.issuedAt = defaultValues.issuedAt;
         }
-        if (data.issuedAt) {
-            header.issuedAt = new Date(data.issuedAt);
+        if (!header.startDate) {
+            header.startDate = defaultValues.startDate;
         }
-        if (data.startDate) {
-            header.startDate = new Date(data.startDate);
+        if (!header.endDate) {
+            header.endDate = defaultValues.endDate;
         }
-        if (data.endDate) {
-            header.endDate = new Date(data.endDate);
+        if (!header.currency) {
+            header.currency = defaultValues.currency;
+        }
+        if (header.budget === undefined) {
+            header.budget = defaultValues.budget;
+        }
+        if (header.paymentMethod === undefined) {
+            header.paymentMethod = defaultValues.paymentMethod;
+        }
+        if (header.billingMethod === undefined) {
+            header.billingMethod = defaultValues.billingMethod;
+        }
+        if (header.cashDiscountDays === undefined) {
+            header.cashDiscountDays = defaultValues.cashDiscountDays;
+        }
+        if (header.cashDiscountPercentage === undefined) {
+            header.cashDiscountPercentage = defaultValues.cashDiscountPercentage;
+        }
+        if (header.dueDays === undefined) {
+            header.dueDays = defaultValues.dueDays;
+        }
+        if (header.isDeletable === undefined) {
+            header.isDeletable = defaultValues.isDeletable;
         }
         return header;
+    }
+
+    public static defaultValues(): ContractData {
+        return {
+            objectType: 'contracts',
+            issuedAt: DateTime.utc().startOf('day').toJSDate(),
+            startDate: DateTime.utc().plus({ months: 1}).startOf('month').toJSDate(),
+            endDate: DateTime.utc().plus({ months: 2}).endOf('month').toJSDate(),
+            paymentMethod: PaymentMethod.BankTransfer,
+            billingMethod: BillingMethod.Invoice,
+            budget: 0,
+            currency: 'EUR',
+            cashDiscountDays: 0,
+            cashDiscountPercentage: 0,
+            dueDays: 30,
+            isDeletable: true,
+            items: []
+        };
     }
 
     constructor(public header: ContractHeaderData,
@@ -44,12 +88,22 @@ export class Contract extends Transaction {
         super();
     }
 
-
     get data(): ContractData {
         return {
             ...this.header,
             items: this.getItemsData()
         };
+    }
+
+    get durationInDays(): number {
+        if (!this.header.startDate || !this.header.endDate) {
+            return 0;
+        }
+        const term = Interval.fromDateTimes(
+            DateTime.fromJSDate(this.header.startDate),
+            DateTime.fromJSDate(this.header.endDate)
+        );
+        return Math.ceil(term.length('days')) + 1;
     }
 
     public buildNewItemFromTemplate(): ContractItem {
@@ -63,31 +117,33 @@ export class Contract extends Transaction {
         if (!this.header.startDate || !this.header.endDate) {
             return false;
         }
-        const now = new Date();
-        const start = new Date(this.header.startDate);
-        const end = new Date(this.header.endDate);
-        return start <= now && end >= now;
+        const term = Interval.fromDateTimes(
+            DateTime.fromJSDate(this.header.startDate),
+            DateTime.fromJSDate(this.header.endDate)
+        );
+        return term.contains(DateTime.utc());
     }
 
     public isFuture(): boolean {
         if (!this.header.startDate || !this.header.endDate) {
             return false;
         }
-        const now = new Date();
-        const start = new Date(this.header.startDate);
-        const end = new Date(this.header.endDate);
-        return start > now && end > now;
+        const term = Interval.fromDateTimes(
+            DateTime.fromJSDate(this.header.startDate),
+            DateTime.fromJSDate(this.header.endDate)
+        );
+        return term.isAfter(DateTime.utc());
     }
 
     public isInvoiceable(): boolean {
         if (!this.header.startDate || !this.header.endDate) {
             return false;
         }
-        const now = new Date();
-        const start = new Date(this.header.startDate);
-        const end = new Date(this.header.endDate);
-        end.setMonth(end.getMonth() + 1);
-        return start <= now && end >= now;
+        const term = Interval.fromDateTimes(
+            DateTime.fromJSDate(this.header.startDate),
+            DateTime.fromJSDate(this.header.endDate).plus({ months: 1})
+        );
+        return term.contains(DateTime.utc());
     }
 }
 
@@ -159,14 +215,16 @@ export class ContractItem extends TransactionItem {
         if (data.description) {
             this._description = data.description;
         }
-        if (data.pricePerUnit) {
-            this._pricePerUnit = data.pricePerUnit;
+        this._pricePerUnit = data.pricePerUnit;
+        if (this._pricePerUnit === undefined) {
+            this._pricePerUnit = 0;
         }
         if (data.priceUnit) {
             this._priceUnit = data.priceUnit;
         }
-        if (data.cashDiscountAllowed) {
-            this._cashDiscountAllowed = data.cashDiscountAllowed;
+        this._cashDiscountAllowed = data.cashDiscountAllowed;
+        if (this._cashDiscountAllowed === undefined) {
+            this._cashDiscountAllowed = false;
         }
     }
 

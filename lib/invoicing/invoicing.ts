@@ -11,10 +11,10 @@ export class Invoicing {
         billingPeriod: string,
         quantity: number,
         vatPercentage: number = 19,
-        id: string = 'unknown'): Invoice {
+        id?: string): Invoice {
 
         const data: InvoiceData = {
-            id: id || 'unknown',
+            id: id ,
             objectType: 'invoices',
             organization: contract.header.organization,
             billingMethod: contract.header.billingMethod,

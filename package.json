@@ -1,12 +1,13 @@
 {
   "name": "jovisco-domain",
-  "version": "1.0.8",
+  "version": "1.0.10",
   "description": "JOVISCO Domain",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test": "jest",
+    "full-icu": "node --icu-data-dir=./node_modules/full-icu",
+    "test": "njest",
     "version": "npm version patch",
     "publish": "npm publish"
   },
