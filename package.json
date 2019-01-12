@@ -6,8 +6,7 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "full-icu": "node --icu-data-dir=./node_modules/full-icu",
-    "test": "njest",
+    "test": "jest",
     "version": "npm version patch",
     "publish": "npm publish"
   },

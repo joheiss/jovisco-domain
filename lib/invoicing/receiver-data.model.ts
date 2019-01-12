@@ -5,7 +5,7 @@ export interface ReceiverData extends ReceiverHeaderData {
 }
 
 export interface ReceiverHeaderData extends MasterdataHeaderData {
-    name: string;
+    name?: string;
     nameAdd?: string;
     logoUrl?: string;
 }

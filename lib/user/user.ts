@@ -2,17 +2,37 @@ import {UserData} from './user-data.model';
 
 export class User {
 
-    public static createFromData(data: UserData): User | undefined {
-        if (data) {
-            return new User(data);
+    public static createFromData(data: UserData): User {
+        if (!data) {
+            throw new Error('invalid input');
         }
-        return undefined;
+        return new User(data);
     }
 
-    constructor(private _data: UserData) {}
+    public static defaultValues(): any {
+        return {
+            isLocked: false,
+            roles: []
+        };
+    }
 
-    get uid(): string {
-        return this._data.uid || '';
+    private _data: UserData;
+    constructor(data: UserData) {
+
+        const defaultValues = User.defaultValues();
+
+        this._data = { ...data };
+
+        if (this._data.isLocked === undefined) {
+            this._data.isLocked = defaultValues.isLocked;
+        }
+        if (!this._data.roles) {
+            this._data.roles = defaultValues.roles;
+        }
+    }
+
+    get uid(): string  | undefined {
+        return this._data.uid;
     }
     get email(): string {
         return this._data.email || '';
@@ -59,7 +79,7 @@ export class User {
     get data(): UserData {
         return this._data;
     }
-    set data(value: UserData) {
-        this._data = value;
+    set data(data: UserData) {
+        this._data ={...data };
     }
 }

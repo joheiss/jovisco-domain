@@ -5,20 +5,46 @@ import {MasterdataStatus} from './masterdata-status.model';
 export class Receiver extends Masterdata {
 
     public static createFromData(data: ReceiverData) {
-        if (data) {
-            const header = Receiver.extractHeaderFromData(data);
-            const address = Receiver.extractAddressFromData(data);
-            return new Receiver(header, address);
+        if (!data) {
+            throw new Error('invalid input');
         }
-        return undefined;
+        const header = Receiver.extractHeaderFromData(data);
+        const address = Receiver.extractAddressFromData(data);
+        return new Receiver(header, address);
+    }
+
+    public static defaultValues(): ReceiverData {
+        return {
+            objectType: 'receivers',
+            status: MasterdataStatus.active,
+            isDeletable: true,
+            address: {
+                country: 'DE'
+            }
+        };
     }
 
     private static extractAddressFromData(data: ReceiverData): ReceiverAddressData {
-        return data.address;
+        const address = data.address;
+        const defaultValues = Receiver.defaultValues();
+        if (!address.country) {
+            address.country = defaultValues.address.country;
+        }
+        return address;
     }
 
     private static extractHeaderFromData(data: ReceiverData): ReceiverHeaderData {
         const {address: removed1, ...header} = data;
+        const defaultValues = Receiver.defaultValues();
+        if (!header.objectType) {
+            header.objectType = defaultValues.objectType;
+        }
+        if (header.status === undefined) {
+            header.status = defaultValues.status;
+        }
+        if (header.isDeletable === undefined) {
+            header.isDeletable = defaultValues.isDeletable;
+        }
         return header;
     }
 
@@ -35,7 +61,7 @@ export class Receiver extends Masterdata {
     }
 
     public isActive(): boolean {
-        return this.header.status ? this.header.status.valueOf() === MasterdataStatus.active.valueOf() : false;
+        return this.header.status === MasterdataStatus.active;
     }
 
     public isPersistent(): boolean {

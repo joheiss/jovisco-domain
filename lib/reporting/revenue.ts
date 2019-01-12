@@ -1,9 +1,44 @@
 import {RevenueData} from './revenue-data.model';
+import {RevenuePerYearData} from './revenue-per-year-data.model';
+import {DateTime} from 'luxon';
 
 export class Revenue {
 
     public static createFromData(data: RevenueData): Revenue {
         return new Revenue(data);
+    }
+
+    public static calculateTotalRevenuesPerYear(revenues: Revenue[]): RevenuePerYearData[] {
+
+        const revenueMatrix = Revenue.initializeRevenuePerYear();
+
+        revenues.map(r => {
+            const i = Revenue.calculateIndexOfRevenueYear(+r.year);
+            revenueMatrix[i].revenuePerYear = r.totalRevenue;
+            r.revenueInMonths.map((m, j) => revenueMatrix[i].revenuePerMonth[j] = m);
+            return revenueMatrix;
+        });
+
+        return revenueMatrix;
+    }
+
+    private static calculateIndexOfRevenueYear(year: number): number {
+        return DateTime.utc().year - year;
+    }
+
+    private static initializeRevenuePerYear(): RevenuePerYearData[] {
+
+        const revenuesPerYear = [] as RevenuePerYearData[];
+
+        for (let i = 0; i < 3; i++) {
+            const revenuePerYear: RevenuePerYearData = {
+                year: DateTime.utc().year - i,
+                revenuePerMonth: new Array(12).fill(0),
+                revenuePerYear: 0
+            };
+            revenuesPerYear.push(revenuePerYear);
+        }
+        return revenuesPerYear;
     }
 
     constructor(private data: RevenueData) {
@@ -54,4 +89,5 @@ export class Revenue {
             .forEach(recv => total = total + this.data.months[month][recv] || 0);
         return total;
     }
+
 }

@@ -1,4 +1,14 @@
-import {BillingMethod, Contract, ContractData, Invoice, InvoiceData, Invoicing, PaymentMethod} from '../lib/invoicing';
+import {
+    BillingMethod,
+    Contract,
+    ContractData,
+    Invoice,
+    InvoiceData,
+    Invoicing,
+    PaymentMethod,
+    Receiver,
+    ReceiverData
+} from '../lib/invoicing';
 import {DateTime, Info} from 'luxon';
 import {inspect} from 'util';
 
@@ -146,6 +156,19 @@ describe('invoice tests', () => {
     });
 });
 
+describe('receiver tests', () => {
+    it('should create a receiver', () => {
+        const receiver = mockReceiver();
+        console.log('receiver: ', inspect(receiver));
+        expect(receiver).toBeTruthy();
+        expect(receiver.header.objectType === 'receivers');
+        expect(receiver.isActive()).toBeTruthy();
+        expect(receiver.address.country).toEqual('DE');
+    });
+});
+
+
+
 const mockContract = (): Contract => {
     const issuedAt = DateTime.utc().minus({ months: 1});
     const startDate = issuedAt.plus({ months: 1}).startOf('month');
@@ -211,4 +234,23 @@ const mockInvoice = (): Invoice => {
         ]
     };
     return Invoice.createFromData(data);
+};
+
+const mockReceiver = (): Receiver => {
+
+    const data: ReceiverData = {
+        id: '1901',
+        organization: 'GHQ',
+        name: 'Test Receiver 1901',
+        address: {
+            postalCode: '77777',
+            city: 'Testingen',
+            street: 'Test Allee 7',
+            email: 'test@test.example.de',
+            phone: '+49 777 7654321',
+            fax: '+49 777 7654329',
+            webSite: 'http://www.test.example.de'
+        }
+    };
+    return Receiver.createFromData(data);
 };
