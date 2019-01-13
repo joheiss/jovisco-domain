@@ -1,4 +1,4 @@
-import {DateUtility} from '../lib/utils/date-utility';
+import {DateUtility, difference} from '../lib/utils';
 import {DateTime} from 'luxon';
 
 describe('test date utility', () => {
@@ -25,4 +25,23 @@ describe('test date utility', () => {
         const expectedDate = new Date(2019, 0, 1, 23, 59, 59, 999);
         expect(DateUtility.getEndDate(inputDate)).toEqual(expectedDate);
     });
+});
+
+describe('object utility tests', () => {
+    it('should return the difference between two objects', () => {
+
+        const base = {
+            name: 'Hansi',
+            age: 44,
+            jobs: ['this', 'that'],
+            stuff: {
+                something: true,
+                somethingElse: 'else'
+            }
+        };
+        const changes = { name: 'Horsti' };
+        const toBeCompared = {...base, ...changes };
+        expect(difference(toBeCompared, base)).toEqual(changes);
+    });
+
 });
