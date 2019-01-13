@@ -1,14 +1,14 @@
 {
   "name": "jovisco-domain",
-  "version": "1.0.11",
+  "version": "1.0.13",
   "description": "JOVISCO Domain",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "test": "jest",
-    "version": "npm version patch",
-    "publish": "npm publish"
+    "pkg:version": "npm version patch",
+    "pkg:publish": "npm publish"
   },
   "repository": {
     "type": "git",
