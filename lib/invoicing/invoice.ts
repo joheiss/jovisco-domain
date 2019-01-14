@@ -145,6 +145,10 @@ export class Invoice extends Transaction {
         return this.header.cashDiscountPercentage || 0;
     }
 
+    get discountedNetValue(): number {
+        return this.items.reduce((sum, item) => sum + item.getDiscountedNetValue(this.cashDiscountPercentage), 0);
+    }
+
     get dueDate(): Date {
         const issuedAt = this.header.issuedAt ? DateTime.fromJSDate(this.header.issuedAt) : DateTime.utc();
         return issuedAt.plus({days: this.header.dueInDays}).toJSDate();
