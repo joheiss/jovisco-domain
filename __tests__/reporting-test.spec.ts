@@ -16,6 +16,15 @@ describe('reporting tests', () => {
         };
         expect(Revenue.calculateTotalRevenuesPerYear([revenue])[0]).toEqual(expected);
     });
+
+    it('should return a correct revenue period', () => {
+        let date = new Date(2019, 0, 15);
+        let expected = { year: 2018, month: 12};
+        expect(Revenue.calculateRevenuePeriod(date)).toEqual(expected);
+        date = new Date(2019, 0, 16);
+        expected = { year: 2019, month: 1};
+        expect(Revenue.calculateRevenuePeriod(date)).toEqual(expected);
+    });
 });
 
 const mockRevenue = (year: string): Revenue => {

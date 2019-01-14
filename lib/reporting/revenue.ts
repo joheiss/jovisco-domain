@@ -22,6 +22,15 @@ export class Revenue {
         return revenueMatrix;
     }
 
+    public static calculateRevenuePeriod(date: Date): { year: number, month: number } {
+        const dt = DateTime.fromJSDate(date);
+        if (dt.day > 15) {
+            return { year: dt.year, month: dt.month };
+        }
+        const prev = dt.minus({months: 1});
+        return {year: prev.year, month: prev.month};
+    }
+
     private static calculateIndexOfRevenueYear(year: number): number {
         return DateTime.utc().year - year;
     }
