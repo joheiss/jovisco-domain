@@ -5,6 +5,7 @@ import {DateTime} from 'luxon';
 import {BillingMethod} from './billing-method.model';
 import {PaymentMethod} from './payment-method.model';
 import {Contract, ContractItem} from './contract';
+import {DateUtility} from '../utils';
 
 export class Invoice extends Transaction {
 
@@ -158,6 +159,19 @@ export class Invoice extends Transaction {
 
     get paymentAmount(): number {
         return this.items.reduce((sum, item) => sum + item.getDiscountedValue(this.cashDiscountPercentage), 0);
+    }
+
+    get revenuePeriod(): { year: number, month: number } {
+
+        const issuedAt = this.header.issuedAt ?
+            DateTime.fromJSDate(this.header.issuedAt) :
+            DateTime.fromJSDate(DateUtility.getStartDate());
+
+        if (issuedAt.day > 15) {
+            return { year: issuedAt.year, month: issuedAt.month };
+        }
+        const previousMonth = issuedAt.minus({months: 1});
+        return {year: previousMonth.year, month: previousMonth.month};
     }
 
     get vatAmount(): number {
