@@ -5,4 +5,3 @@ export * from './reporting';
 export * from './settings';
 export * from './user';
 export * from './utils';
-export * from './printforms';
