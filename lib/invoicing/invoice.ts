@@ -144,6 +144,7 @@ export class Invoice extends Transaction {
     get cashDiscountPercentage(): number {
         return this.header.cashDiscountPercentage || 0;
     }
+
     get dueDate(): Date {
         const issuedAt = this.header.issuedAt ? DateTime.fromJSDate(this.header.issuedAt) : DateTime.utc();
         return issuedAt.plus({days: this.header.dueInDays}).toJSDate();
@@ -369,7 +370,14 @@ export class InvoiceItem extends TransactionItem {
         return this.cashDiscountAllowed ? this.grossValue * cashDiscountPercentage / 100 : 0;
     }
 
-    public getDiscountedValue(cashDiscountPercentage: number): number {
+    getDiscountedNetValue(cashDiscountPercentage: number): number {
+        if (this.cashDiscountAllowed && cashDiscountPercentage > 0) {
+            return this.getDiscountedValue(cashDiscountPercentage) * 100 / ( 100 + this.vatPercentage);
+        }
+        return this.netValue;
+    }
+
+    getDiscountedValue(cashDiscountPercentage: number): number {
         return this.grossValue - this.getCashDiscountValue(cashDiscountPercentage);
     }
 
