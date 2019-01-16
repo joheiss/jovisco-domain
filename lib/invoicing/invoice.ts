@@ -53,7 +53,7 @@ export class Invoice extends Transaction {
     public static defaultValues(): InvoiceData {
         return {
             objectType: 'invoices',
-            issuedAt: DateTime.utc().startOf('day').toJSDate(),
+            issuedAt: DateUtility.getCurrentDate(),
             status: InvoiceStatus.created,
             paymentTerms: '30 Tage: netto',
             paymentMethod: PaymentMethod.BankTransfer,
@@ -150,7 +150,9 @@ export class Invoice extends Transaction {
     }
 
     get dueDate(): Date {
-        const issuedAt = this.header.issuedAt ? DateTime.fromJSDate(this.header.issuedAt) : DateTime.utc();
+        const issuedAt = this.header.issuedAt ?
+            DateTime.fromJSDate(this.header.issuedAt) :
+            DateTime.fromJSDate(DateUtility.getCurrentDate());
         return issuedAt.plus({days: this.header.dueInDays}).toJSDate();
     }
 
@@ -170,7 +172,7 @@ export class Invoice extends Transaction {
 
         const issuedAt = this.header.issuedAt ?
             DateTime.fromJSDate(this.header.issuedAt) :
-            DateTime.fromJSDate(DateUtility.getStartDate());
+            DateTime.fromJSDate(DateUtility.getCurrentDate());
 
         if (issuedAt.day > 15) {
             return { year: issuedAt.year, month: issuedAt.month };

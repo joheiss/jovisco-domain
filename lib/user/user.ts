@@ -11,7 +11,7 @@ export class User {
 
     public static defaultValues(): any {
         return {
-            isLocked: false,
+            isLocked: true,
             roles: []
         };
     }

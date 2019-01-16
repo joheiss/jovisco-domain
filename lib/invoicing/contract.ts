@@ -3,6 +3,7 @@ import {ContractData, ContractHeaderData, ContractItemData} from './contract-dat
 import {DateTime, Interval} from 'luxon';
 import {PaymentMethod} from './payment-method.model';
 import {BillingMethod} from './billing-method.model';
+import {DateUtility} from '../utils';
 
 export class Contract extends Transaction {
 
@@ -66,11 +67,12 @@ export class Contract extends Transaction {
     }
 
     public static defaultValues(): ContractData {
+        const today = DateUtility.getCurrentDate();
         return {
             objectType: 'contracts',
-            issuedAt: DateTime.utc().startOf('day').toJSDate(),
-            startDate: DateTime.utc().plus({ months: 1}).startOf('month').toJSDate(),
-            endDate: DateTime.utc().plus({ months: 2}).endOf('month').toJSDate(),
+            issuedAt: today,
+            startDate: DateUtility.getDefaultNextPeriodStartDate(today),
+            endDate: DateUtility.getDefaultNextPeriodEndDate(today),
             paymentMethod: PaymentMethod.BankTransfer,
             billingMethod: BillingMethod.Invoice,
             budget: 0,
@@ -99,11 +101,7 @@ export class Contract extends Transaction {
         if (!this.header.startDate || !this.header.endDate) {
             return 0;
         }
-        const term = Interval.fromDateTimes(
-            DateTime.fromJSDate(this.header.startDate),
-            DateTime.fromJSDate(this.header.endDate)
-        );
-        return Math.ceil(term.length('days')) + 1;
+        return DateUtility.getDurationInDays(this.header.startDate, this.header.endDate);
     }
 
     public buildNewItemFromTemplate(): ContractItem {
