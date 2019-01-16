@@ -48,22 +48,22 @@ export class DateUtility {
 
     public static getIssuedAtFromMoment(moment: any): Date {
         return DateTime.fromMillis(moment.valueOf())
-            .setZone('UTC')
             .startOf('day')
+            .setZone('utc')
             .toJSDate();
     }
 
     public static getStartDateFromMoment(moment: any): Date {
         return DateTime.fromMillis(moment.valueOf())
-            .setZone('UTC')
             .startOf('day')
+            .setZone('utc')
             .toJSDate();
     }
 
     public static getEndDateFromMoment(moment: any): Date {
         return DateTime.fromMillis(moment.valueOf())
-            .setZone('UTC')
             .endOf('day')
+            .setZone('utc')
             .toJSDate();
     }
 }
