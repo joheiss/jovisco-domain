@@ -46,24 +46,23 @@ export class DateUtility {
         return Math.ceil(duration.length('days')) + 1;
     }
 
-    public static getIssuedAtFromMoment(moment: any): Date {
-        return DateTime.fromMillis(moment.valueOf())
-            .setZone('utc')
-            .startOf('day')
-            .toJSDate();
+    public static getDateFromMoment(moment: any): Date {
+        return this.momentToDateTimeUTC(moment).toJSDate();
     }
 
     public static getStartDateFromMoment(moment: any): Date {
-        return DateTime.fromMillis(moment.valueOf())
-            .setZone('utc')
+        return this.momentToDateTimeUTC(moment)
             .startOf('day')
             .toJSDate();
     }
 
     public static getEndDateFromMoment(moment: any): Date {
-        return DateTime.fromMillis(moment.valueOf())
-            .setZone('utc')
+        return this.momentToDateTimeUTC(moment)
             .endOf('day')
             .toJSDate();
+    }
+
+    private static momentToDateTimeUTC(moment: any): DateTime {
+        return DateTime.fromMillis(moment.valueOf());
     }
 }
