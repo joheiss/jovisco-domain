@@ -60,7 +60,7 @@ export class DateUtility {
             .toJSDate();
     }
 
-    public static geNedDateFromMoment(moment: any): Date {
+    public static getEndDateFromMoment(moment: any): Date {
         return DateTime.fromMillis(moment.valueOf())
             .setZone('UTC')
             .endOf('day')
