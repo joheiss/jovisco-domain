@@ -119,7 +119,7 @@ export class Contract extends Transaction {
             DateTime.fromJSDate(this.header.startDate),
             DateTime.fromJSDate(this.header.endDate)
         );
-        return term.contains(DateTime.utc());
+        return term.contains(DateTime.local());
     }
 
     public isFuture(): boolean {
@@ -130,7 +130,7 @@ export class Contract extends Transaction {
             DateTime.fromJSDate(this.header.startDate),
             DateTime.fromJSDate(this.header.endDate)
         );
-        return term.isAfter(DateTime.utc());
+        return term.isAfter(DateTime.local());
     }
 
     public isInvoiceable(): boolean {
@@ -141,7 +141,7 @@ export class Contract extends Transaction {
             DateTime.fromJSDate(this.header.startDate),
             DateTime.fromJSDate(this.header.endDate).plus({ months: 1})
         );
-        return term.contains(DateTime.utc());
+        return term.contains(DateTime.local());
     }
 }
 

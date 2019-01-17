@@ -32,7 +32,7 @@ export class Revenue {
     }
 
     private static calculateIndexOfRevenueYear(year: number): number {
-        return DateTime.utc().year - year;
+        return DateTime.local().year - year;
     }
 
     private static initializeRevenuePerYear(): RevenuePerYearData[] {

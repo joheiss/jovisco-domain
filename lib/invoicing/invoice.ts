@@ -137,7 +137,7 @@ export class Invoice extends Transaction {
     }
 
     get cashDiscountDate(): Date {
-        const issuedAt = this.header.issuedAt ? DateTime.fromJSDate(this.header.issuedAt) : DateTime.utc();
+        const issuedAt = this.header.issuedAt ? DateTime.fromJSDate(this.header.issuedAt) : DateTime.local();
         return issuedAt.plus({days: this.header.cashDiscountDays}).toJSDate();
     }
 
@@ -218,7 +218,7 @@ export class Invoice extends Transaction {
 
     public isDue(): boolean {
         const due = DateTime.fromJSDate(this.dueDate);
-        return this.header.status !== InvoiceStatus.paid && due <= DateTime.utc().startOf('day');
+        return this.header.status !== InvoiceStatus.paid && due <= DateTime.local().startOf('day');
     }
 
     public isOpen(): boolean {

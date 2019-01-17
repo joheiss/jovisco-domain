@@ -11,7 +11,7 @@ export class DateUtility {
     }
 
     public static getCurrentDate(): Date {
-        return DateTime.local().set({hour: 12, minute: 0, second: 0, millisecond: 0}).toJSDate();
+        return DateTime.local().startOf('day').toJSDate();
     }
 
     public static getDefaultNextPeriodStartDate(date: Date = new Date()): Date {
