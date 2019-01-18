@@ -281,6 +281,14 @@ export class InvoiceItem extends TransactionItem {
         return new InvoiceItem(data);
     }
 
+    static defaultValues(): any {
+        return {
+            contractItemId: 0,
+            quantity: 0,
+            pricePerUnit: 0
+        } as InvoiceItemData;
+    }
+
     constructor(data?: InvoiceItemData) {
         super();
         this.initialize();

@@ -155,6 +155,12 @@ export class ContractItem extends TransactionItem {
         return new ContractItem(data);
     }
 
+    static defaultValues(): any {
+        return {
+            pricePerUnit: 0
+        };
+    }
+    
     constructor(data?: ContractItemData) {
         super();
         this.initialize();
