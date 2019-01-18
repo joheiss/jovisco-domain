@@ -139,7 +139,7 @@ export class Contract extends Transaction {
         }
         const term = Interval.fromDateTimes(
             DateTime.fromJSDate(this.header.startDate),
-            DateTime.fromJSDate(this.header.endDate).plus({ months: 1})
+            DateTime.fromJSDate(this.header.endDate).plus({ days: 15})
         );
         return term.contains(DateTime.local());
     }
