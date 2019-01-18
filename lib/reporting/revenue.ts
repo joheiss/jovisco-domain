@@ -41,7 +41,7 @@ export class Revenue {
 
         for (let i = 0; i < 3; i++) {
             const revenuePerYear: RevenuePerYearData = {
-                year: DateTime.utc().year - i,
+                year: DateTime.local().year - i,
                 revenuePerMonth: new Array(12).fill(0),
                 revenuePerYear: 0
             };

@@ -9,11 +9,13 @@ import {
     ReceiverData
 } from '../lib/invoicing';
 import {DateTime, Info} from 'luxon';
+import {DateUtility} from '../lib/utils';
+import {Revenue} from '../lib/reporting';
 
 export const mockContract = (): Contract => {
-    const issuedAt = DateTime.utc().minus({ months: 1});
-    const startDate = issuedAt.plus({ months: 1}).startOf('month');
-    const endDate = startDate.plus({ months: 2}).endOf('month');
+    const issuedAt = DateTime.local().minus({ months: 1});
+    const startDate = DateUtility.getDefaultNextPeriodStartDate(issuedAt.toJSDate());
+    const endDate = DateUtility.getDefaultNextPeriodEndDate(startDate);
     const data: ContractData = {
         id: '4901',
         organization: 'GHQ',
@@ -25,13 +27,13 @@ export const mockContract = (): Contract => {
         customerId: '1901',
         description: 'Test Contract 4901',
         dueDays: 60,
-        endDate: endDate.toJSDate(),
+        endDate: endDate,
         internalText: '',
         invoiceText: 'according to test contract 4901',
         issuedAt: issuedAt.toJSDate(),
         paymentMethod: PaymentMethod.BankTransfer,
         paymentTerms: '30 Tage: 3% Skonto; 60 Tage: netto',
-        startDate: startDate.toJSDate(),
+        startDate: startDate,
         items: [
             {id: 1, cashDiscountAllowed: true, description: 'Arbeitszeit', pricePerUnit: 123.45, priceUnit: 'Std.'}
         ]
@@ -40,10 +42,10 @@ export const mockContract = (): Contract => {
 };
 
 export const mockInvoice = (): Invoice => {
-    const issuedAt = DateTime.utc();
-    const month = issuedAt.minus({months: 1}).month;
+    const issuedAt = DateUtility.getCurrentDate();
+    const month = Revenue.calculateRevenuePeriod(issuedAt).month;
     const periodName = `${Info.months()[month - 1]}`;
-    const year = `${issuedAt.minus({months: 1}).year}`;
+    const year = `${Revenue.calculateRevenuePeriod(issuedAt).year}`;
     const billingPeriod = `${periodName} ${year}`;
 
     const data: InvoiceData = {
@@ -57,7 +59,7 @@ export const mockInvoice = (): Invoice => {
         dueInDays: 60,
         internalText: 'Das ist eine Testrechnung.',
         invoiceText: 'nach Aufwand',
-        issuedAt: issuedAt.toJSDate(),
+        issuedAt: issuedAt,
         paymentTerms: '30 Tage: 3% Skonto; 60 Tage: netto',
         receiverId: '1901',
         vatPercentage: 19.0,
