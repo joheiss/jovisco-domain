@@ -4,6 +4,7 @@ export class User {
 
     public static createFromData(data: UserData): User {
         if (!data) {
+            console.error('No data: ', data);
             throw new Error('invalid input');
         }
         return new User(data);
