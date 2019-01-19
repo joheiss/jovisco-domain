@@ -1,5 +1,6 @@
 import {TransactionItem} from './transaction';
 import {InvoiceItemData} from './invoice-data.model';
+import {ContractItem} from './contract-item';
 
 export class InvoiceItem extends TransactionItem {
 
@@ -127,6 +128,13 @@ export class InvoiceItem extends TransactionItem {
 
     getDiscountedValue(cashDiscountPercentage: number): number {
         return this.grossValue - this.getCashDiscountValue(cashDiscountPercentage);
+    }
+
+    setItemDataFromContractItem(contractItem: ContractItem): void {
+        this._description = contractItem.description;
+        this._quantityUnit = contractItem.priceUnit;
+        this._pricePerUnit = contractItem.pricePerUnit;
+        this._cashDiscountAllowed = contractItem.cashDiscountAllowed;
     }
 
     protected fill(data?: InvoiceItemData) {

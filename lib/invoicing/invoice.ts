@@ -117,8 +117,7 @@ export class Invoice extends Transaction {
         return header;
     }
 
-    constructor(public header: InvoiceHeaderData,
-                public items: InvoiceItem[]) {
+    constructor(public header: InvoiceHeaderData, public items: InvoiceItem[]) {
         super();
     }
 
@@ -176,7 +175,7 @@ export class Invoice extends Transaction {
             DateTime.fromJSDate(DateUtility.getCurrentDate());
 
         if (issuedAt.day > 15) {
-            return { year: issuedAt.year, month: issuedAt.month };
+            return {year: issuedAt.year, month: issuedAt.month};
         }
         const previousMonth = issuedAt.minus({months: 1});
         return {year: previousMonth.year, month: previousMonth.month};
@@ -231,22 +230,12 @@ export class Invoice extends Transaction {
     }
 
     public setContractRelatedData(contract: Contract): void {
-        this.header.receiverId = contract.header.customerId;
-        this.header.billingMethod = contract.header.billingMethod;
-        this.header.paymentMethod = contract.header.paymentMethod;
-        this.header.paymentTerms = contract.header.paymentTerms;
-        this.header.cashDiscountPercentage = contract.header.cashDiscountPercentage;
-        this.header.cashDiscountDays = contract.header.cashDiscountDays;
-        this.header.dueInDays = contract.header.dueDays;
-        this.header.invoiceText = contract.header.invoiceText;
+        this.setHeaderDataFromContract(contract);
         if (this.items && this.items.length) {
             this.items.forEach((item: InvoiceItem) => {
                 const contractItem: ContractItem = contract.getItem(item.contractItemId);
                 if (contractItem) {
-                    item.description = contractItem.description;
-                    item.quantityUnit = contractItem.priceUnit;
-                    item.pricePerUnit = contractItem.pricePerUnit;
-                    item.cashDiscountAllowed = contractItem.cashDiscountAllowed;
+                    item.setItemDataFromContractItem(contractItem);
                 }
             });
         } else {
@@ -265,6 +254,17 @@ export class Invoice extends Transaction {
                 this.items.push(item);
             }
         }
+    }
+
+    public setHeaderDataFromContract(contract: Contract): void {
+        this.header.receiverId = contract.header.customerId;
+        this.header.billingMethod = contract.header.billingMethod;
+        this.header.paymentMethod = contract.header.paymentMethod;
+        this.header.paymentTerms = contract.header.paymentTerms;
+        this.header.cashDiscountPercentage = contract.header.cashDiscountPercentage;
+        this.header.cashDiscountDays = contract.header.cashDiscountDays;
+        this.header.dueInDays = contract.header.dueDays;
+        this.header.invoiceText = contract.header.invoiceText;
     }
 }
 
