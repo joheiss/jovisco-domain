@@ -1,6 +1,6 @@
 {
   "name": "jovisco-domain",
-  "version": "1.0.40",
+  "version": "1.0.41",
   "description": "JOVISCO Domain",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
