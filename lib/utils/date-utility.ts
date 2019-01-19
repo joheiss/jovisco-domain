@@ -62,6 +62,10 @@ export class DateUtility {
             .toJSDate();
     }
 
+    public static getIntervalFromDates(from: Date, to: Date): Interval {
+        return Interval.fromDateTimes(DateTime.fromJSDate(from), DateTime.fromJSDate(to));
+    }
+
     private static momentToDateTimeUTC(moment: any): DateTime {
         return DateTime.fromMillis(moment.valueOf());
     }
