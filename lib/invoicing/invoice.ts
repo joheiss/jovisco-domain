@@ -23,7 +23,7 @@ export class Invoice extends Transaction {
             currency: contract.header.currency,
             dueInDays: contract.header.dueDays,
             invoiceText: contract.header.invoiceText,
-            issuedAt: DateTime.local().toJSDate(),
+            issuedAt: DateUtility.getCurrentDate(),
             paymentMethod: contract.header.paymentMethod,
             paymentTerms: contract.header.paymentTerms,
             receiverId: contract.header.customerId,
