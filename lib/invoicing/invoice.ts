@@ -14,7 +14,7 @@ export class Invoice extends Transaction {
     public static createFromContract(contract: Contract): Invoice {
 
         const data: InvoiceData = {
-            objectType: 'invoices',
+            ...Invoice.defaultValues(),
             organization: contract.header.organization,
             billingMethod: contract.header.billingMethod,
             cashDiscountDays: contract.header.cashDiscountDays,
