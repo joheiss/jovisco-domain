@@ -20,6 +20,7 @@ export class DocumentLink {
     }
 
     private _data: DocumentLinkData;
+
     constructor(data: DocumentLinkData) {
         const defaultValues = DocumentLink.defaultValues();
         this._data = { ... data };

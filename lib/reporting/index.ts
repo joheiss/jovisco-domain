@@ -1,4 +1,5 @@
 export * from './open-invoice-data.model';
+export * from './open-invoice';
 export * from './reporting-data.model';
 export * from './revenue-data.model';
 export * from './revenue-extract-data.model';
