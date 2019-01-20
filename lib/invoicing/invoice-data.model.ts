@@ -9,7 +9,7 @@ export interface InvoiceData extends InvoiceHeaderData {
 
 export interface InvoiceHeaderData extends TransactionHeaderData {
     status?: InvoiceStatus;
-    receiverId?: string;
+    receiverId: string;
     contractId?: string;
     billingMethod?: BillingMethod;
     billingPeriod?: string;
