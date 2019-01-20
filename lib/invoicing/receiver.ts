@@ -13,7 +13,7 @@ export class Receiver extends Masterdata {
         return new Receiver(header, address);
     }
 
-    public static defaultValues(): ReceiverData {
+    public static defaultValues(): any {
         return {
             objectType: 'receivers',
             status: MasterdataStatus.active,

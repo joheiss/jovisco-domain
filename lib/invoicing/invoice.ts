@@ -51,7 +51,7 @@ export class Invoice extends Transaction {
         return new Invoice(header, items);
     }
 
-    public static defaultValues(): InvoiceData {
+    public static defaultValues(): any {
         return {
             objectType: 'invoices',
             issuedAt: DateUtility.getCurrentDate(),

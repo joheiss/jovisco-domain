@@ -67,7 +67,7 @@ export class Contract extends Transaction {
         return header;
     }
 
-    public static defaultValues(): ContractData {
+    public static defaultValues(): any {
         const today = DateUtility.getCurrentDate();
         return {
             objectType: 'contracts',
