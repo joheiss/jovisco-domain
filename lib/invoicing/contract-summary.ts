@@ -17,7 +17,7 @@ export type ContractSummariesType = {[id: string]: ContractSummary };
 
 export class ContractSummaries {
 
-    public create(contracts: ContractsEntity, receivers: ReceiversEntity, invoices: InvoicesEntity): ContractSummariesType {
+    public static create(contracts: ContractsEntity, receivers: ReceiversEntity, invoices: InvoicesEntity): ContractSummariesType {
 
         const summaries = {} as ContractSummariesType;
 
@@ -45,6 +45,7 @@ export class ContractSummaries {
                 // get changeability
                 summaries[contractId].changeable = summaries[contractId].lastInvoiceId.length === 0;
             });
+
         return summaries;
     }
 
