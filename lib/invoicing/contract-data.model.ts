@@ -8,7 +8,7 @@ export interface ContractData extends ContractHeaderData {
 
 export interface ContractHeaderData extends TransactionHeaderData {
     description?: string;
-    customerId?: string;
+    customerId: string;
     startDate?: Date;
     endDate?: Date;
     paymentTerms?: string;
