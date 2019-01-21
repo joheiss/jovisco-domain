@@ -48,8 +48,10 @@ export class ContractSummary {
     }
 
     public setReceiverInfos(receivers: ReceiversEntity): ContractSummary {
-
-        this._data.receiverName = receivers[this._data.object.header.customerId].name;
+        const receiver = receivers[this._data.object.header.customerId];
+        console.log('receiver: ', receiver);
+        console.log('receiver.name: ', receiver.name);
+        this._data.receiverName = receiver.name;
         return this;
     }
 

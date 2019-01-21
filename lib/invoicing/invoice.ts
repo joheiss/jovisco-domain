@@ -229,7 +229,7 @@ export class Invoice extends Transaction {
         return this.header.status === InvoiceStatus.paid;
     }
 
-    public setContractRelatedData(contract: Contract): void {
+    public setContractRelatedData(contract: Contract): Invoice {
         this.setHeaderDataFromContract(contract);
         if (this.items && this.items.length) {
             this.items.forEach((item: InvoiceItem) => {
@@ -254,9 +254,11 @@ export class Invoice extends Transaction {
                 this.items.push(item);
             }
         }
+
+        return this;
     }
 
-    public setHeaderDataFromContract(contract: Contract): void {
+    public setHeaderDataFromContract(contract: Contract): Invoice {
         this.header.receiverId = contract.header.customerId;
         this.header.billingMethod = contract.header.billingMethod;
         this.header.paymentMethod = contract.header.paymentMethod;
@@ -265,6 +267,12 @@ export class Invoice extends Transaction {
         this.header.cashDiscountDays = contract.header.cashDiscountDays;
         this.header.dueInDays = contract.header.dueDays;
         this.header.invoiceText = contract.header.invoiceText;
+        return this;
+    }
+
+    public setVatPercentage(percentage: number): Invoice {
+        this.header.vatPercentage = percentage;
+        return this;
     }
 }
 
