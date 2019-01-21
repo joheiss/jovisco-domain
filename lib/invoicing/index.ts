@@ -1,3 +1,4 @@
+export * from './dictionary';
 export * from './billing-method.model';
 export * from './payment-method.model';
 export * from './bo-data.model';
