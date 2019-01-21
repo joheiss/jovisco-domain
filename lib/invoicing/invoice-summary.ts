@@ -1,33 +1,43 @@
-import {Summary} from './summary';
 import {Invoice} from './invoice';
-import {InvoicesEntity} from './invoices-entity';
 import {ReceiversEntity} from './receivers-entity';
 import {InvoiceStatus} from './invoice-status.model';
+import {InvoiceSummaryData} from './invoice-summary-data.model';
 
-export interface InvoiceSummary extends Summary {
-    object: Invoice;
-    receiverName: string;
-    changeable: boolean;
-}
+export class InvoiceSummary {
 
-export type InvoiceSummariesType = {[id: string]: InvoiceSummary };
+    public static create(invoice: Invoice): InvoiceSummary {
 
-export class InvoiceSummaries {
+        const data = {
+            object: invoice,
+            receiverName: '',
+            changeable: invoice.header.status === InvoiceStatus.created.valueOf()
+        };
 
-    public static create(invoices: InvoicesEntity, receivers: ReceiversEntity): InvoiceSummariesType {
+        return new InvoiceSummary(data);
+    }
 
-        const summaries = {} as InvoiceSummariesType;
+    constructor(private _data: InvoiceSummaryData) {
+    }
 
-        Object.keys(invoices)
-            .forEach(invoiceId => {
-                const receiver = receivers[invoices[invoiceId].receiverId];
-                summaries[invoiceId] = {
-                    object: Invoice.createFromData(invoices[invoiceId]),
-                    receiverName: receiver ? receiver.name : 'Unbekannt',
-                    changeable: invoices[invoiceId].status === InvoiceStatus.created.valueOf()
-                };
-            });
+    get object(): Invoice {
+        return this._data.object;
+    }
 
-        return summaries;
+    get receiverName(): string {
+        return this._data.receiverName;
+    }
+
+    get changeable(): boolean {
+        return this._data.changeable
+    }
+
+    get data(): InvoiceSummaryData {
+        return this._data;
+    }
+
+    public setReceiverInfos(receivers: ReceiversEntity): InvoiceSummary {
+
+        this._data.receiverName = receivers[this._data.object.header.receiverId].name;
+        return this;
     }
 }

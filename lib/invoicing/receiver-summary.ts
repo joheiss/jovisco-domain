@@ -1,77 +1,107 @@
-import {Summary} from './summary';
 import {Receiver} from './receiver';
-import {ReceiversEntity} from './receivers-entity';
 import {ContractsEntity} from './contracts-entity';
 import {InvoicesEntity} from './invoices-entity';
 import {Contract} from './contract';
 import {Invoice} from './invoice';
+import {ReceiverSummaryData} from './receiver-summary-data.model';
 
-export interface ReceiverSummary extends Summary {
-    object: Receiver;
-    deletable: boolean;
-    activeContractsCount: number;
-    expiredContractsCount: number;
-    lastContractId: string;
-    dueInvoicesCount: number;
-    openInvoicesCount: number;
-    lastInvoiceId: string;
-}
+export class ReceiverSummary {
 
-export type ReceiverSummariesType = {[id: string]: ReceiverSummary };
+    public static create(receiver: Receiver): ReceiverSummary {
 
-export class ReceiverSummaries {
+        const data = {
+            object: receiver,
+            deletable: false,
+            activeContractsCount: 0,
+            expiredContractsCount: 0,
+            lastContractId: '',
+            dueInvoicesCount: 0,
+            openInvoicesCount: 0,
+            lastInvoiceId: ''
+        };
+        return new ReceiverSummary(data);
+    }
 
-    public static create(receivers: ReceiversEntity, contracts: ContractsEntity, invoices: InvoicesEntity): ReceiverSummariesType {
+    constructor(private _data: ReceiverSummaryData) {
+    }
 
-        const summaries = {} as ReceiverSummariesType;
-        Object.keys(receivers)
-            .forEach(receiverId => {
-                summaries[receiverId] = {
-                    object:  Receiver.createFromData(receivers[receiverId]),
-                    deletable: false,
-                    activeContractsCount: 0,
-                    expiredContractsCount: 0,
-                    lastContractId: '',
-                    dueInvoicesCount: 0,
-                    openInvoicesCount: 0,
-                    lastInvoiceId: ''
-                };
-                Object.keys(contracts)
-                    .filter(contractId => contracts[contractId].customerId === receiverId)
-                    .forEach(contractId => {
-                        const contract = Contract.createFromData(contracts[contractId]);
-                        // get counts for active and expired contracts
-                        if (contract.isActive() || contract.isFuture()) {
-                            ++summaries[receiverId].activeContractsCount;
-                        } else {
-                            ++summaries[receiverId].expiredContractsCount;
-                        }
-                        // get last contract Id
-                        if (contractId > summaries[receiverId].lastContractId) {
-                            summaries[receiverId].lastContractId = contractId;
-                        }
-                    });
-                Object.keys(invoices)
-                    .filter(invoiceId => invoices[invoiceId].receiverId === receiverId)
-                    .forEach(invoiceId => {
-                        const invoice = Invoice.createFromData(invoices[invoiceId]);
-                        // get counts for open and due invoices
-                        if (invoice.isDue()) {
-                            summaries[receiverId].dueInvoicesCount++;
-                        }
-                        if (invoice.isOpen()) {
-                            summaries[receiverId].openInvoicesCount++;
-                        }
-                        // get last invoice Id
-                        if (invoiceId > summaries[receiverId].lastInvoiceId) {
-                            summaries[receiverId].lastInvoiceId = invoiceId;
-                        }
-                    });
-                // get deletable
-                summaries[receiverId].deletable = !(summaries[receiverId].lastContractId.length || summaries[receiverId].lastInvoiceId.length);
+    get object(): Receiver {
+        return this._data.object;
+    }
+
+    get deletable(): boolean {
+        return this._data.lastContractId.length + this._data.lastInvoiceId.length > 0;
+    }
+
+    get activeContractsCount(): number {
+        return this._data.activeContractsCount;
+    }
+
+    get expiredContractsCount(): number {
+        return this._data.expiredContractsCount;
+    }
+
+    get lastContractId(): string {
+        return this._data.lastContractId
+    }
+
+    get dueInvoicesCount(): number {
+        return this._data.dueInvoicesCount;
+    }
+
+    get openInvoicesCount(): number {
+        return this._data.openInvoicesCount;
+    }
+
+    get lastInvoiceId(): string {
+        return this._data.lastInvoiceId
+    }
+
+    get data(): ReceiverSummaryData {
+        this._data.deletable = this.deletable;
+        return this._data;
+    }
+
+    public setContractInfos(contracts: ContractsEntity): ReceiverSummary {
+
+        Object.keys(contracts)
+            .filter(contractId => contracts[contractId].customerId === this._data.object.header.id)
+            .forEach(contractId => {
+                const contract = Contract.createFromData(contracts[contractId]);
+                // get counts for active and expired contracts
+                if (contract.isActive() || contract.isFuture()) {
+                    ++this._data.activeContractsCount;
+                } else {
+                    ++this._data.expiredContractsCount;
+                }
+                // get last contract Id
+                if (contractId > this._data.lastContractId) {
+                    this._data.lastContractId = contractId;
+                }
             });
 
-        return summaries;
+        return this;
+    }
+
+    public setInvoiceInfos(invoices: InvoicesEntity): ReceiverSummary {
+
+        Object.keys(invoices)
+            .filter(invoiceId => invoices[invoiceId].receiverId === this._data.object.header.id)
+            .forEach(invoiceId => {
+                const invoice = Invoice.createFromData(invoices[invoiceId]);
+                // get counts for open and due invoices
+                if (invoice.isDue()) {
+                    this._data.dueInvoicesCount++;
+                }
+                if (invoice.isOpen()) {
+                    this._data.openInvoicesCount++;
+                }
+                // get last invoice Id
+                if (invoiceId > this._data.lastInvoiceId) {
+                    this._data.lastInvoiceId = invoiceId;
+                }
+            });
+
+        return this;
     }
 }
-

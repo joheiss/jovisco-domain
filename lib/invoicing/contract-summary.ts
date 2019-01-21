@@ -1,52 +1,73 @@
-import {Summary} from './summary';
 import {Contract} from './contract';
-import {ContractsEntity} from './contracts-entity';
 import {ReceiversEntity} from './receivers-entity';
 import {InvoicesEntity} from './invoices-entity';
 import {Invoice} from './invoice';
+import {ContractSummaryData} from './contract-summary-data.model';
 
-export interface ContractSummary extends Summary {
-    object: Contract;
-    receiverName: string;
-    changeable: boolean;
-    revenue: number;
-    lastInvoiceId: string;
-}
+export class ContractSummary {
 
-export type ContractSummariesType = {[id: string]: ContractSummary };
+    public static create(contract: Contract): ContractSummary {
 
-export class ContractSummaries {
+        const data = {
+            object: contract,
+            receiverName: '',
+            revenue: 0,
+            changeable: false,
+            lastInvoiceId: ''
+        };
 
-    public static create(contracts: ContractsEntity, receivers: ReceiversEntity, invoices: InvoicesEntity): ContractSummariesType {
-
-        const summaries = {} as ContractSummariesType;
-
-        Object.keys(contracts)
-            .forEach(contractId => {
-                const receiver = receivers[contracts[contractId].customerId];
-                summaries[contractId] = {
-                    object: Contract.createFromData(contracts[contractId]),
-                    receiverName: receiver ? receivers[contracts[contractId].customerId].name : 'Unbekannt',
-                    revenue: 0,
-                    changeable: false,
-                    lastInvoiceId: ''
-                };
-                Object.keys(invoices)
-                    .filter(invoiceId => invoices[invoiceId].contractId === contractId)
-                    .forEach(invoiceId => {
-                        const invoice = Invoice.createFromData(invoices[invoiceId]);
-                        // calculate revenue
-                        summaries[contractId].revenue = summaries[contractId].revenue + invoice.netValue;
-                        // get last invoice Id
-                        if (invoiceId > summaries[contractId].lastInvoiceId) {
-                            summaries[contractId].lastInvoiceId = invoiceId;
-                        }
-                    });
-                // get changeability
-                summaries[contractId].changeable = summaries[contractId].lastInvoiceId.length === 0;
-            });
-
-        return summaries;
+        return new ContractSummary(data);
     }
 
+    constructor(private _data: ContractSummaryData) {
+    }
+
+    get object(): Contract {
+        return this._data.object;
+    }
+
+    get receiverName(): string {
+        return this._data.receiverName;
+    }
+
+    get changeable(): boolean {
+        return this._data.lastInvoiceId.length > 0;
+    }
+
+    get revenue(): number {
+        return this._data.revenue;
+    }
+
+    get lastInvoiceId(): string {
+        return this._data.lastInvoiceId
+    }
+
+    get data(): ContractSummaryData {
+        this._data.changeable = this.changeable;
+        return this._data;
+    }
+
+    public setReceiverInfos(receivers: ReceiversEntity): ContractSummary {
+
+        this._data.receiverName = receivers[this._data.object.header.customerId].name;
+        return this;
+    }
+
+    public setInvoiceInfos(invoices: InvoicesEntity): ContractSummary {
+
+        Object.keys(invoices)
+            .filter(invoiceId => invoices[invoiceId].contractId === this._data.object.header.id)
+            .forEach(invoiceId => {
+                const invoice = Invoice.createFromData(invoices[invoiceId]);
+                // calculate revenue
+                this._data.revenue = this._data.revenue + invoice.netValue;
+                // get last invoice Id
+                if (invoiceId > this._data.lastInvoiceId) {
+                    this._data.lastInvoiceId = invoiceId;
+                }
+            });
+
+        return this;
+    }
 }
+
