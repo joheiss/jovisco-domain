@@ -5,13 +5,16 @@ import {DateUtility} from '../utils';
 
 export class Vat {
 
-    static findVatPercentage(vatSettings: SettingData, taxCode: string, issuedAt: Date): number {
+    public static findVatPercentage(vatSettings: SettingData, taxCode: string, issuedAt: Date): number {
 
-        return vatSettings.values
-            .filter((vatSetting: VatData) => Vat.isValid(vatSetting, issuedAt))
+        const vats = vatSettings.values.slice();
+
+        const percentages = vats
+            .filter((vatSetting: VatData) => vatSetting.taxCode === taxCode && Vat.isValid(vatSetting, issuedAt))
             .sort((a: VatData, b: VatData) => a.validTo.getTime() - b.validTo.getTime())
-            .first()
             .map((vatSetting: VatData) => vatSetting.percentage);
+
+        return percentages[0] || 0;
     }
 
     private static isValid(vatSetting: VatData, issuedAt: Date): boolean {

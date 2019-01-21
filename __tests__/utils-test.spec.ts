@@ -44,24 +44,6 @@ describe('test date utility', () => {
         expect(DateUtility.getDurationInDays(startDate, endDate)).toBeLessThanOrEqual(92);
     });
 
-    it('should return a time zone independent date', () => {
-        const issuedAt = new Date(Date.UTC(2019, 0, 15));
-        const moment = 1547938800000;
-        const date1 = DateTime.fromMillis(moment);
-        console.log('full date: ', date1.toISO());
-        const date2 = DateUtility.getDateFromMoment(moment);
-        console.log('issued at: ', DateTime.fromJSDate(date2).toISO());
-        const date3 = DateUtility.getStartDateFromMoment(moment);
-        console.log('start date: ', DateTime.fromJSDate(date3).toISO());
-        const date4 = DateUtility.getEndDateFromMoment(moment);
-        console.log('start date: ', DateTime.fromJSDate(date4).toISO());
-        const locale = 'de-DE';
-        const options = {
-            timeZone: 'UTC'
-        };
-        console.log('Date: ', issuedAt.toLocaleDateString(locale, options));
-        console.log('Date: ', issuedAt.toLocaleString(locale, options));
-    });
 });
 
 describe('object utility tests', () => {
