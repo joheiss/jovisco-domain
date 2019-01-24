@@ -7,7 +7,7 @@ import {ReceiverSummaryData} from './receiver-summary-data.model';
 
 export class ReceiverSummary {
 
-    public static create(receiver: Receiver): ReceiverSummary {
+    static create(receiver: Receiver): ReceiverSummary {
 
         const data = {
             object: receiver,
@@ -22,7 +22,7 @@ export class ReceiverSummary {
         return new ReceiverSummary(data);
     }
 
-    constructor(private _data: ReceiverSummaryData) {
+    private constructor(private _data: ReceiverSummaryData) {
     }
 
     get object(): Receiver {
@@ -62,14 +62,14 @@ export class ReceiverSummary {
         return this._data;
     }
 
-    public setContractInfos(contracts: ContractsEntity): ReceiverSummary {
+    setContractInfos(contracts: ContractsEntity): ReceiverSummary {
 
         Object.keys(contracts)
             .filter(contractId => contracts[contractId].customerId === this._data.object.header.id)
             .forEach(contractId => {
                 const contract = Contract.createFromData(contracts[contractId]);
                 // get counts for active and expired contracts
-                if (contract.isActive() || contract.isFuture()) {
+                if (contract.term.isActive || contract.term.isFuture) {
                     ++this._data.activeContractsCount;
                 } else {
                     ++this._data.expiredContractsCount;
@@ -83,7 +83,7 @@ export class ReceiverSummary {
         return this;
     }
 
-    public setInvoiceInfos(invoices: InvoicesEntity): ReceiverSummary {
+    setInvoiceInfos(invoices: InvoicesEntity): ReceiverSummary {
 
         Object.keys(invoices)
             .filter(invoiceId => invoices[invoiceId].receiverId === this._data.object.header.id)

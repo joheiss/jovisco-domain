@@ -1,4 +1,6 @@
-import {mockContractSummaries, mockInvoiceSummaries, mockReceiverSummaries} from './mock.factory';
+import {mockContractSummaries} from './mock-contract.factory';
+import {mockInvoiceSummaries} from './mock-invoice.factory';
+import {mockReceiverSummaries} from './mock-receiver.factory';
 
 describe('contract summary test', () => {
 

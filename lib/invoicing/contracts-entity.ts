@@ -1,6 +1,6 @@
 import {ContractData} from './contract-data.model';
 import {Contract} from './contract';
-import {Dictionary} from './dictionary';
+import {Dictionary} from '../core/dictionary';
 
 // export type ContractsEntity = { [id: string]: ContractData };
 export type ContractsEntity = Dictionary<ContractData>;

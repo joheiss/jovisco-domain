@@ -5,7 +5,7 @@ import {InvoiceSummaryData} from './invoice-summary-data.model';
 
 export class InvoiceSummary {
 
-    public static create(invoice: Invoice): InvoiceSummary {
+    static create(invoice: Invoice): InvoiceSummary {
 
         const data = {
             object: invoice,
@@ -16,7 +16,7 @@ export class InvoiceSummary {
         return new InvoiceSummary(data);
     }
 
-    constructor(private _data: InvoiceSummaryData) {
+    private constructor(private _data: InvoiceSummaryData) {
     }
 
     get object(): Invoice {
@@ -35,8 +35,7 @@ export class InvoiceSummary {
         return this._data;
     }
 
-    public setReceiverInfos(receivers: ReceiversEntity): InvoiceSummary {
-
+    setReceiverInfos(receivers: ReceiversEntity): InvoiceSummary {
         this._data.receiverName = receivers[this._data.object.header.receiverId].name;
         return this;
     }

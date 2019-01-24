@@ -11,7 +11,7 @@ import {ContractItem} from './contract-item';
 
 export class Invoice extends Transaction {
 
-    public static createFromContract(contract: Contract): Invoice {
+    static createFromContract(contract: Contract): Invoice {
 
         const data: InvoiceData = {
             ...Invoice.defaultValues(),
@@ -42,7 +42,7 @@ export class Invoice extends Transaction {
         return Invoice.createFromData(data);
     }
 
-    public static createFromData(data: InvoiceData): Invoice {
+    static createFromData(data: InvoiceData): Invoice {
         if (!data) {
             throw new Error('invalid input');
         }
@@ -51,7 +51,7 @@ export class Invoice extends Transaction {
         return new Invoice(header, items);
     }
 
-    public static defaultValues(): any {
+   static defaultValues(): any {
         return {
             objectType: 'invoices',
             issuedAt: DateUtility.getCurrentDate(),
@@ -80,45 +80,12 @@ export class Invoice extends Transaction {
 
     protected static extractHeaderFromData(data: InvoiceData): InvoiceHeaderData {
         const {items: removed1, ...header} = data;
-        const defaultValues = Invoice.defaultValues();
-        if (!header.objectType) {
-            header.objectType = defaultValues.objectType;
-        }
-        if (header.billingMethod === undefined) {
-            header.billingMethod = defaultValues.billingMethod;
-        }
-        if (header.paymentMethod === undefined) {
-            header.paymentMethod = defaultValues.paymentMethod;
-        }
-        if (!header.paymentTerms) {
-            header.paymentTerms = defaultValues.paymentTerms;
-        }
-        if (!header.issuedAt) {
-            header.issuedAt = defaultValues.issuedAt;
-        }
-        if (header.status === undefined) {
-            header.status = defaultValues.status;
-        }
-        if (!header.currency) {
-            header.currency = defaultValues.currency;
-        }
-        if (header.vatPercentage === undefined) {
-            header.vatPercentage = defaultValues.vatPercentage;
-        }
-        if (header.cashDiscountDays === undefined) {
-            header.cashDiscountDays = defaultValues.cashDiscountDays;
-        }
-        if (header.cashDiscountPercentage === undefined) {
-            header.cashDiscountPercentage = defaultValues.cashDiscountPercentage;
-        }
-        if (header.dueInDays === undefined) {
-            header.dueInDays = defaultValues.dueInDays;
-        }
-        return header;
+        return Object.assign({}, Invoice.defaultValues(), header) as InvoiceHeaderData;
     }
 
-    constructor(public header: InvoiceHeaderData, public items: InvoiceItem[]) {
+    private constructor(public header: InvoiceHeaderData, public items: InvoiceItem[]) {
         super();
+        this.items.forEach(item => item.headerRef = this);
     }
 
     get data(): InvoiceData {
@@ -129,7 +96,7 @@ export class Invoice extends Transaction {
     }
 
     get cashDiscountAmount(): number {
-        return this.items.reduce((sum, item) => sum + item.getCashDiscountValue(this.cashDiscountPercentage), 0);
+        return this.items.reduce((sum, item) => sum + item.cashDiscountValue, 0);
     }
 
     get cashDiscountBaseAmount(): number {
@@ -146,7 +113,7 @@ export class Invoice extends Transaction {
     }
 
     get discountedNetValue(): number {
-        return this.items.reduce((sum, item) => sum + item.getDiscountedNetValue(this.cashDiscountPercentage), 0);
+        return this.items.reduce((sum, item) => sum + item.discountedNetValue, 0);
     }
 
     get dueDate(): Date {
@@ -165,7 +132,7 @@ export class Invoice extends Transaction {
     }
 
     get paymentAmount(): number {
-        return this.items.reduce((sum, item) => sum + item.getDiscountedValue(this.cashDiscountPercentage), 0);
+        return this.items.reduce((sum, item) => sum + item.discountedValue, 0);
     }
 
     get revenuePeriod(): { year: number, month: number } {
@@ -193,49 +160,45 @@ export class Invoice extends Transaction {
         this.header.vatPercentage = newValue;
     }
 
-    public buildNewItemFromTemplate(): InvoiceItem {
-        const id = this.getNextItemId();
-        // build item template
+    buildNewItemFromTemplate(): InvoiceItem {
         return InvoiceItem.createFromData({
-            id,
-            contractItemId: undefined,
-            description: undefined,
-            quantity: 0,
-            quantityUnit: undefined,
-            pricePerUnit: 0,
-            cashDiscountAllowed: false,
+            ...InvoiceItem.defaultValues(),
+            id: this.getNextItemId(),
+            headerRef: this,
             vatPercentage: this.vatPercentage
         });
     }
 
-    public getItem(itemId: number): InvoiceItem | undefined {
+    getItem(itemId: number): InvoiceItem | undefined {
         return this.items.find(item => item.data.id === itemId);
     }
 
-    public isBilled(): boolean {
+    isBilled(): boolean {
         return this.header.status === InvoiceStatus.billed;
     }
 
-    public isDue(): boolean {
+    isDue(): boolean {
         const due = DateTime.fromJSDate(this.dueDate);
         return this.header.status !== InvoiceStatus.paid && due <= DateTime.local().startOf('day');
     }
 
-    public isOpen(): boolean {
+    isOpen(): boolean {
         return this.header.status !== InvoiceStatus.paid;
     }
 
-    public isPaid(): boolean {
+    isPaid(): boolean {
         return this.header.status === InvoiceStatus.paid;
     }
 
-    public setContractRelatedData(contract: Contract): Invoice {
+    setContractRelatedData(contract: Contract): Invoice {
         this.setHeaderDataFromContract(contract);
         if (this.items && this.items.length) {
             this.items.forEach((item: InvoiceItem) => {
-                const contractItem: ContractItem = contract.getItem(item.contractItemId);
-                if (contractItem) {
-                    item.setItemDataFromContractItem(contractItem);
+                if (item.contractItemId) {
+                    const contractItem: ContractItem = contract.getItem(item.contractItemId);
+                    if (contractItem) {
+                        item.setItemDataFromContractItem(contractItem);
+                    }
                 }
             });
         } else {
@@ -254,11 +217,10 @@ export class Invoice extends Transaction {
                 this.items.push(item);
             }
         }
-
         return this;
     }
 
-    public setHeaderDataFromContract(contract: Contract): Invoice {
+    setHeaderDataFromContract(contract: Contract): Invoice {
         this.header.receiverId = contract.header.customerId;
         this.header.billingMethod = contract.header.billingMethod;
         this.header.paymentMethod = contract.header.paymentMethod;
@@ -270,7 +232,7 @@ export class Invoice extends Transaction {
         return this;
     }
 
-    public setVatPercentage(percentage: number): Invoice {
+    setVatPercentage(percentage: number): Invoice {
         this.header.vatPercentage = percentage;
         return this;
     }

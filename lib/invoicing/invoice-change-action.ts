@@ -24,6 +24,6 @@ export class InvoiceChangeAction {
 
     return new InvoiceChangeAction(type, change, invoice);
   }
-  constructor(public type: string, public change: InvoiceChange, public payload: Invoice) {}
+  private constructor(public type: string, public change: InvoiceChange, public payload: Invoice) {}
 }
 

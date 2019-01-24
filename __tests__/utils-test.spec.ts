@@ -26,24 +26,6 @@ describe('test date utility', () => {
         expect(DateUtility.getEndDate(inputDate)).toEqual(expectedDate);
     });
 
-    it('should return a default start date - beginning of month, time: 00:00:00:000', () => {
-        const date = new Date(2019, 0, 15);
-        expect(DateUtility.getDefaultNextPeriodStartDate(date)).toEqual(new Date(2019, 1, 1, 0, 0, 0, 0));
-    });
-
-    it('should return a default end date - end of month, time: 23:59:59:999', () => {
-        const date = new Date(2019, 0, 15);
-        expect(DateUtility.getDefaultNextPeriodEndDate(date)).toEqual(new Date(2019, 3, 30, 23, 59, 59, 999));
-    });
-
-    it('should return a duration >= 89 days and <= 92 days', () => {
-        const issuedAt = new Date(2019, 0, 15);
-        const startDate = DateUtility.getDefaultNextPeriodStartDate(issuedAt);
-        const endDate = DateUtility.getDefaultNextPeriodEndDate(issuedAt);
-        expect(DateUtility.getDurationInDays(startDate, endDate)).toBeGreaterThanOrEqual(89);
-        expect(DateUtility.getDurationInDays(startDate, endDate)).toBeLessThanOrEqual(92);
-    });
-
 });
 
 describe('object utility tests', () => {

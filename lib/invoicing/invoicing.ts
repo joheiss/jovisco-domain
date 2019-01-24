@@ -6,7 +6,7 @@ import {InvoiceStatus} from './invoice-status.model';
 
 export class Invoicing {
 
-    public static createInvoiceFromContract(
+   static createInvoiceFromContract(
         contract: Contract,
         billingPeriod: string,
         quantity: number,

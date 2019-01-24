@@ -1,4 +1,4 @@
-import {TransactionHeaderData} from './transaction-data.model';
+import {TransactionHeaderData, TransactionItemData} from './transaction-data.model';
 import {BusinessObject} from './business-object';
 
 export abstract class Transaction extends BusinessObject{
@@ -7,7 +7,7 @@ export abstract class Transaction extends BusinessObject{
 
     abstract get data(): any;
 
-    public addItem(item: TransactionItem): any {
+    addItem(item: TransactionItem): any {
         this.items.push(item);
         return item;
     }
@@ -22,14 +22,13 @@ export abstract class Transaction extends BusinessObject{
         if (this.items.length === 0) {
             return 1;
         }
+        let ids: any[] = [], gaps: any[] = [];
         // get ids
-        const ids = this.items.map(item => item.data.id).sort();
+        ids = this.items.map(item => item.data.id).sort();
         // find gap in id numbers
-        const gaps = ids.filter((id, i) => id !== i + 1);
+        gaps = ids.filter((id, i) => id !== i + 1);
         // free id number is either gap or max + 1
-        const id = gaps.length > 0 ? gaps[0] - 1 : ids[ids.length - 1] + 1;
-        // build item template
-        return id;
+        return gaps.length > 0 ? gaps[0] - 1 : ids[ids.length - 1] + 1;
     }
 
     removeItem(id: number): void {
@@ -42,18 +41,31 @@ export abstract class Transaction extends BusinessObject{
 }
 
 export abstract class TransactionItem {
-    protected _id?: number;
+
+    protected constructor(protected _data: TransactionItemData) { }
 
     get id(): number | undefined {
-        return this._id;
+        return this._data.id;
     }
     set id(value: number | undefined) {
-        this._id = value;
+        this._data.id = value;
+    }
+    get headerRef(): any {
+        return this._data.headerRef;
+    }
+    set headerRef(headerRef: any) {
+        this._data.headerRef = headerRef;
+    }
+    get parentRef(): any {
+        return this._data.parentRef;
+    }
+    set parentRe(parentRef: any) {
+        this._data.parentRef = parentRef;
+    }
+    get data(): TransactionItemData {
+        return this._data;
     }
 
-    abstract get data(): any;
-
-    protected abstract initialize(): void;
     protected abstract fill(data?: any): void;
 
 }

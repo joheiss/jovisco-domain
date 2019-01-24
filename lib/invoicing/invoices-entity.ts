@@ -1,6 +1,6 @@
 import {InvoiceData} from './invoice-data.model';
 import {Invoice} from './invoice';
-import {Dictionary} from './dictionary';
+import {Dictionary} from '../core/dictionary';
 
 export type InvoicesEntity = Dictionary<InvoiceData>;
 // export type InvoicesEntity = { [id: string]: InvoiceData };

@@ -5,10 +5,12 @@ export interface TransactionData extends TransactionHeaderData {
 }
 
 export interface TransactionHeaderData extends BoHeaderData {
-    issuedAt?: Date;
+    issuedAt: Date;
 }
 
 export interface TransactionItemData {
     id?: number;
+    headerRef?: any;
+    parentRef?: any;
 }
 

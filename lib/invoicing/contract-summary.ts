@@ -6,7 +6,7 @@ import {ContractSummaryData} from './contract-summary-data.model';
 
 export class ContractSummary {
 
-    public static create(contract: Contract): ContractSummary {
+    static create(contract: Contract): ContractSummary {
 
         const data = {
             object: contract,
@@ -19,7 +19,7 @@ export class ContractSummary {
         return new ContractSummary(data);
     }
 
-    constructor(private _data: ContractSummaryData) {
+    private constructor(private _data: ContractSummaryData) {
     }
 
     get object(): Contract {
@@ -47,15 +47,13 @@ export class ContractSummary {
         return this._data;
     }
 
-    public setReceiverInfos(receivers: ReceiversEntity): ContractSummary {
+    setReceiverInfos(receivers: ReceiversEntity): ContractSummary {
         const receiver = receivers[this._data.object.header.customerId];
-        console.log('receiver: ', receiver);
-        console.log('receiver.name: ', receiver.name);
         this._data.receiverName = receiver.name;
         return this;
     }
 
-    public setInvoiceInfos(invoices: InvoicesEntity): ContractSummary {
+    setInvoiceInfos(invoices: InvoicesEntity): ContractSummary {
 
         Object.keys(invoices)
             .filter(invoiceId => invoices[invoiceId].contractId === this._data.object.header.id)

@@ -1,4 +1,3 @@
-export * from './dictionary';
 export * from './billing-method.model';
 export * from './payment-method.model';
 export * from './bo-data.model';
@@ -8,6 +7,7 @@ export * from './transaction';
 export * from './contract-data.model';
 export * from './contract';
 export * from './contract-item';
+export * from './contract-term';
 export * from './contract-summary-data.model';
 export * from './contract-summary';
 export * from './contract-summaries';

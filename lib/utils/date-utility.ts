@@ -14,14 +14,6 @@ export class DateUtility {
         return DateTime.local().startOf('day').toJSDate();
     }
 
-    public static getDefaultNextPeriodStartDate(date: Date = new Date()): Date {
-        return DateTime.fromJSDate(date).plus({months: 1}).startOf('month').toJSDate();
-    }
-
-    public static getDefaultNextPeriodEndDate(date: Date = new Date()): Date {
-        return DateTime.fromJSDate(date).plus({months: 3}).endOf('month').toJSDate();
-    }
-
     public static getStartOfDay(date: Date = new Date()): Date {
         return DateTime.fromJSDate(date).startOf('day').toJSDate();
     }
@@ -39,11 +31,10 @@ export class DateUtility {
     }
 
     public static getDurationInDays(startDate: Date, endDate: Date): number {
-        const duration = Interval.fromDateTimes(
-            DateTime.fromJSDate(startDate),
-            DateTime.fromJSDate(endDate)
-        );
-        return Math.ceil(duration.length('days')) + 1;
+        const start = DateTime.fromJSDate(startDate);
+        const end = DateTime.fromJSDate(endDate);
+        const duration = end.diff(start, 'days');
+        return Math.ceil(duration.days);
     }
 
     public static getDateFromMoment(moment: any): Date {

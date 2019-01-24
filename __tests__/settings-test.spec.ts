@@ -1,5 +1,5 @@
-import {mockAllVatSettings} from './mock.factory';
 import {Vat, VatData} from '../lib/settings';
+import {mockAllVatSettings} from './mock-settings.factory';
 
 describe('settings tests', () => {
 

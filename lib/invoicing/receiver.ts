@@ -4,7 +4,7 @@ import {MasterdataStatus} from './masterdata-status.model';
 
 export class Receiver extends Masterdata {
 
-    public static createFromData(data: ReceiverData) {
+    static createFromData(data: ReceiverData) {
         if (!data) {
             throw new Error('invalid input');
         }
@@ -13,7 +13,7 @@ export class Receiver extends Masterdata {
         return new Receiver(header, address);
     }
 
-    public static defaultValues(): any {
+    static defaultValues(): any {
         return {
             objectType: 'receivers',
             status: MasterdataStatus.active,
@@ -25,7 +25,7 @@ export class Receiver extends Masterdata {
     }
 
     private static extractAddressFromData(data: ReceiverData): ReceiverAddressData {
-        const address = data.address;
+        const address = data.address || {};
         const defaultValues = Receiver.defaultValues();
         if (!address.country) {
             address.country = defaultValues.address.country;
@@ -48,8 +48,7 @@ export class Receiver extends Masterdata {
         return header;
     }
 
-    constructor(public header: ReceiverHeaderData,
-                public address: ReceiverAddressData) {
+    private constructor(public header: ReceiverHeaderData, public address: ReceiverAddressData) {
         super();
     }
 
@@ -60,11 +59,11 @@ export class Receiver extends Masterdata {
         };
     }
 
-    public isActive(): boolean {
+    isActive(): boolean {
         return this.header.status === MasterdataStatus.active;
     }
 
-    public isPersistent(): boolean {
+    isPersistent(): boolean {
         return !!this.header.id;
     }
 }

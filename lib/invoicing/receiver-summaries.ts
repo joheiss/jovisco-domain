@@ -9,17 +9,16 @@ export type ReceiverSummariesData = { [id: string]: ReceiverSummaryData };
 
 export class ReceiverSummaries {
 
-    public static create(receivers: ReceiversEntity, contracts: ContractsEntity, invoices: InvoicesEntity): ReceiverSummariesData {
+    static create(receivers: ReceiversEntity, contracts: ContractsEntity, invoices: InvoicesEntity): ReceiverSummariesData {
 
         const summaries = {} as ReceiverSummariesData;
 
-        Object.keys(receivers)
-            .forEach(receiverId => {
-                summaries[receiverId] = ReceiverSummary.create(Receiver.createFromData(receivers[receiverId]))
-                    .setContractInfos(contracts)
-                    .setInvoiceInfos(invoices)
-                    .data;
-            });
+        Object.keys(receivers).forEach(receiverId => {
+            summaries[receiverId] = ReceiverSummary.create(Receiver.createFromData(receivers[receiverId]))
+                .setContractInfos(contracts)
+                .setInvoiceInfos(invoices)
+                .data;
+        });
 
         return summaries;
     }

@@ -2,10 +2,6 @@ import {TransactionItem} from './transaction';
 import {ContractItemData} from './contract-data.model';
 
 export class ContractItem extends TransactionItem {
-    private _description: string | undefined;
-    private _pricePerUnit: number | undefined;
-    private _priceUnit: string | undefined;
-    private _cashDiscountAllowed: boolean | undefined;
 
     static createFromData(data: ContractItemData): ContractItem {
         return new ContractItem(data);
@@ -13,86 +9,52 @@ export class ContractItem extends TransactionItem {
 
     static defaultValues(): any {
         return {
-            pricePerUnit: 0
+            pricePerUnit: 0,
+            cashDiscountAllowed: false
         };
     }
 
-    constructor(data?: ContractItemData) {
-        super();
-        this.initialize();
-        this.fill(data);
+    private constructor(protected _data: ContractItemData) {
+        super(_data);
+        this.fill(_data);
     }
 
-    get description(): string {
-        return this._description || '';
+    get description(): string | undefined{
+        return this._data.description;
     }
 
-    set description(value: string) {
-        this._description = value;
+    set description(value: string | undefined) {
+        this._data.description = value;
     }
 
-    get pricePerUnit(): number {
-        return this._pricePerUnit || 0;
+    get pricePerUnit(): number | undefined {
+        return this._data.pricePerUnit;
     }
 
-    set pricePerUnit(value: number) {
-        this._pricePerUnit = value;
+    set pricePerUnit(value: number | undefined) {
+        this._data.pricePerUnit = value;
     }
 
-    get priceUnit(): string {
-        return this._priceUnit || '';
+    get priceUnit(): string | undefined {
+        return this._data.priceUnit;
     }
 
-    set priceUnit(value: string) {
-        this._priceUnit = value;
+    set priceUnit(value: string | undefined) {
+        this._data.priceUnit = value;
     }
 
-    get cashDiscountAllowed(): boolean {
-        return this._cashDiscountAllowed || false
+    get cashDiscountAllowed(): boolean | undefined {
+        return this._data.cashDiscountAllowed;
     }
 
-    set cashDiscountAllowed(value: boolean) {
-        this._cashDiscountAllowed = value;
+    set cashDiscountAllowed(value: boolean | undefined) {
+        this._data.cashDiscountAllowed = value;
     }
-
     get data(): ContractItemData {
-        return {
-            id: this._id,
-            description: this._description,
-            pricePerUnit: this._pricePerUnit,
-            priceUnit: this._priceUnit,
-            cashDiscountAllowed: this._cashDiscountAllowed
-        };
+        return this._data;
     }
 
-    protected fill(data?: ContractItemData): void {
-        if (!data) {
-            return;
-        }
-        if (data.id) {
-            this._id = data.id;
-        }
-        if (data.description) {
-            this._description = data.description;
-        }
-        this._pricePerUnit = data.pricePerUnit;
-        if (this._pricePerUnit === undefined) {
-            this._pricePerUnit = 0;
-        }
-        if (data.priceUnit) {
-            this._priceUnit = data.priceUnit;
-        }
-        this._cashDiscountAllowed = data.cashDiscountAllowed;
-        if (this._cashDiscountAllowed === undefined) {
-            this._cashDiscountAllowed = false;
-        }
-    }
-
-    protected initialize(): void {
-        this._id = undefined;
-        this._description = undefined;
-        this._pricePerUnit = 0;
-        this._priceUnit = undefined;
-        this._cashDiscountAllowed = false;
+    protected fill(data: ContractItemData): void {
+        this._data = Object.assign({}, ContractItem.defaultValues(), data);
     }
 }
