@@ -58,9 +58,12 @@ export class InvoiceFactory {
     }
 
     protected static extractHeaderFromData(data: InvoiceData): InvoiceHeaderData {
+        console.log('extract header - data: ', data);
         const {items: removed1, ...header} = data;
-        console.log('extract header: ', data, header);
-        return Object.assign({}, Invoice.defaultValues(), header) as InvoiceHeaderData;
+        console.log('extract header: ', header);
+        const result = Object.assign({}, Invoice.defaultValues(), header) as InvoiceHeaderData;
+        console.log('extract header - result ', test);
+        return result;
     }
 
 }
