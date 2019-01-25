@@ -62,7 +62,7 @@ export class InvoiceFactory {
         const {items: removed1, ...header} = data;
         console.log('extract header: ', header);
         const result = Object.assign({}, Invoice.defaultValues(), header) as InvoiceHeaderData;
-        console.log('extract header - result ', test);
+        console.log('extract header - result ', result);
         return result;
     }
 
