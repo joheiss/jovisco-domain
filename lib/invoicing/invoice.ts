@@ -85,7 +85,6 @@ export class Invoice extends Transaction {
 
     private constructor(public header: InvoiceHeaderData, public items: InvoiceItem[]) {
         super();
-        this.items.forEach(item => item.headerRef = this);
     }
 
     get data(): InvoiceData {
@@ -96,7 +95,7 @@ export class Invoice extends Transaction {
     }
 
     get cashDiscountAmount(): number {
-        return this.items.reduce((sum, item) => sum + item.cashDiscountValue, 0);
+        return this.items.reduce((sum, item) => sum + item.getCashDiscountValue(this.cashDiscountPercentage), 0);
     }
 
     get cashDiscountBaseAmount(): number {
@@ -113,7 +112,7 @@ export class Invoice extends Transaction {
     }
 
     get discountedNetValue(): number {
-        return this.items.reduce((sum, item) => sum + item.discountedNetValue, 0);
+        return this.items.reduce((sum, item) => sum + item.getDiscountedNetValue(this.cashDiscountPercentage), 0);
     }
 
     get dueDate(): Date {
@@ -132,7 +131,7 @@ export class Invoice extends Transaction {
     }
 
     get paymentAmount(): number {
-        return this.items.reduce((sum, item) => sum + item.discountedValue, 0);
+        return this.items.reduce((sum, item) => sum + item.getDiscountedValue(this.cashDiscountPercentage), 0);
     }
 
     get revenuePeriod(): { year: number, month: number } {
@@ -164,7 +163,6 @@ export class Invoice extends Transaction {
         return InvoiceItem.createFromData({
             ...InvoiceItem.defaultValues(),
             id: this.getNextItemId(),
-            headerRef: this,
             vatPercentage: this.vatPercentage
         });
     }

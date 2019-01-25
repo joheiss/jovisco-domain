@@ -1,7 +1,6 @@
 import {TransactionItem} from './transaction';
 import {InvoiceItemData} from './invoice-data.model';
 import {ContractItem} from './contract-item';
-import {Invoice} from './invoice';
 
 export class InvoiceItem extends TransactionItem {
 
@@ -58,10 +57,10 @@ export class InvoiceItem extends TransactionItem {
     set cashDiscountAllowed(value: boolean | undefined) {
         this._data.cashDiscountAllowed = value;
     }
-    get vatPercentage(): number  | undefined {
-        return this._data.vatPercentage;
+    get vatPercentage(): number {
+        return this._data.vatPercentage || 0;
     }
-    set vatPercentage(value: number | undefined) {
+    set vatPercentage(value: number) {
         this._data.vatPercentage = value;
     }
 
@@ -85,27 +84,26 @@ export class InvoiceItem extends TransactionItem {
         return this.vatPercentage ? this.netValue * this.vatPercentage / 100 : 0;
     }
 
-    get cashDiscountValue(): number {
-        return this.headerRef && this.cashDiscountAllowed ? this.grossValue * this.headerRef.cashDiscountPercentage / 100 : 0;
+    getCashDiscountValue(cashDiscountPercentage: number): number {
+        return this.cashDiscountAllowed ? this.grossValue * cashDiscountPercentage / 100 : 0;
     }
 
-    get discountedNetValue(): number {
-        if (this.cashDiscountAllowed && this.headerRef && this.headerRef.cashDiscountPercentage > 0 && this.vatPercentage) {
-            return this.discountedValue * 100 / ( 100 + this.vatPercentage);
+    getDiscountedNetValue(cashDiscountPercentage: number): number {
+        if (this.cashDiscountAllowed && cashDiscountPercentage > 0) {
+            return this.getDiscountedValue(cashDiscountPercentage) * 100 / ( 100 + this.vatPercentage);
         }
         return this.netValue;
     }
 
-    get discountedValue(): number {
-        return this.grossValue - this.cashDiscountValue;
+    getDiscountedValue(cashDiscountPercentage: number): number {
+        return this.grossValue - this.getCashDiscountValue(cashDiscountPercentage);
     }
 
-    setItemDataFromContractItem(contractItem: ContractItem): Invoice {
+    setItemDataFromContractItem(contractItem: ContractItem): void {
         this._data.description = contractItem.description;
         this._data.quantityUnit = contractItem.priceUnit;
         this._data.pricePerUnit = contractItem.pricePerUnit;
         this._data.cashDiscountAllowed = contractItem.cashDiscountAllowed;
-        return this.headerRef;
     }
 
     protected fill(data: InvoiceItemData) {

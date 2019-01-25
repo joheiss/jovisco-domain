@@ -54,7 +54,6 @@ describe('contract tests', () => {
         it('should create an item from data', () => {
             const data = {
                 id: 1,
-                headerRef: contract,
                 description: 'Test',
                 priceUnit: 'Tage',
                 pricePerUnit: 1000.00,

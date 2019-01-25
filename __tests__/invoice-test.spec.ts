@@ -22,7 +22,6 @@ describe('invoice tests', () => {
         const invoice = Invoice.createFromContract(contract);
         expect(invoice).toBeTruthy();
         expect(invoice.items).toHaveLength(1);
-        expect(invoice.items[0].headerRef).toBeTruthy();
         expect(invoice.header.receiverId).toEqual(contract.header.customerId);
         expect(invoice.header.contractId).toEqual(contract.header.id);
         expect(invoice.header.cashDiscountPercentage).toEqual(contract.header.cashDiscountPercentage);
@@ -118,7 +117,7 @@ describe('invoice tests', () => {
         });
 
         it('should return a new item with id = 2', () => {
-            const expected = {...InvoiceItem.defaultValues(), id: 2, headerRef: invoice, vatPercentage: 19.0};
+            const expected = {...InvoiceItem.defaultValues(), id: 2, vatPercentage: 19.0};
             expect(invoice.buildNewItemFromTemplate().data).toEqual(expected);
         });
 
@@ -158,7 +157,6 @@ describe('invoice tests', () => {
         it('should create an item from data', () => {
             const data = {
                 id: 1,
-                headerRef: invoice,
                 contractItemId: 1,
                 description: 'Test',
                 quantity: 1,
@@ -220,19 +218,19 @@ describe('invoice tests', () => {
             it('should return the correct item cash discount value', () => {
                 const expected = 35.7;
                 // @ts-ignore
-                expect(item.cashDiscountValue).toEqual(expected);
+                expect(item.getCashDiscountValue(invoice.cashDiscountPercentage)).toEqual(expected);
             });
 
             it('should return the correct item discounted net value', () => {
                 const expected = (1190 - 35.7) * 100 / 119;
                 // @ts-ignore
-                expect(item.discountedNetValue).toEqual(expected);
+                expect(item.getDiscountedNetValue(invoice.cashDiscountPercentage)).toEqual(expected);
             });
 
             it('should return the correct item discounted value', () => {
                 const expected = 1190 - 35.7;
                 // @ts-ignore
-                expect(item.discountedValue).toEqual(expected);
+                expect(item.getDiscountedValue(invoice.cashDiscountPercentage)).toEqual(expected);
             });
 
             it('should correctly set the contract related item data', () => {

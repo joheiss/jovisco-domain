@@ -50,18 +50,6 @@ export abstract class TransactionItem {
     set id(value: number | undefined) {
         this._data.id = value;
     }
-    get headerRef(): any {
-        return this._data.headerRef;
-    }
-    set headerRef(headerRef: any) {
-        this._data.headerRef = headerRef;
-    }
-    get parentRef(): any {
-        return this._data.parentRef;
-    }
-    set parentRe(parentRef: any) {
-        this._data.parentRef = parentRef;
-    }
     get data(): TransactionItemData {
         return this._data;
     }

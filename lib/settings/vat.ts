@@ -7,14 +7,9 @@ export class Vat {
 
     public static findVatPercentage(vatSettings: SettingData, taxCode: string, issuedAt: Date): number {
 
-        const vats = vatSettings.values.slice();
-
-        const percentages = vats
-            .filter((vatSetting: VatData) => vatSetting.taxCode === taxCode && Vat.isValid(vatSetting, issuedAt))
-            .sort((a: VatData, b: VatData) => a.validTo.getTime() - b.validTo.getTime())
-            .map((vatSetting: VatData) => vatSetting.percentage);
-
-        return percentages[0] || 0;
+        return vatSettings.values
+            .find((vatSetting: VatData) => vatSetting.taxCode === taxCode && Vat.isValid(vatSetting, issuedAt))
+            .percentage;
     }
 
     private static isValid(vatSetting: VatData, issuedAt: Date): boolean {

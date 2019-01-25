@@ -52,7 +52,6 @@ export class Contract extends Transaction {
 
     private constructor(public header: ContractHeaderData, public items: ContractItem[]) {
         super();
-        this.items.forEach(item => item.headerRef = this);
     }
 
     get data(): ContractData {

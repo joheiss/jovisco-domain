@@ -10,7 +10,5 @@ export interface TransactionHeaderData extends BoHeaderData {
 
 export interface TransactionItemData {
     id?: number;
-    headerRef?: any;
-    parentRef?: any;
 }
 
