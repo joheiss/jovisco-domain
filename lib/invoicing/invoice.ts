@@ -1,5 +1,5 @@
 import {Transaction} from './transaction';
-import {InvoiceData, InvoiceHeaderData, InvoiceItemData} from './invoice-data.model';
+import {InvoiceData, InvoiceHeaderData} from './invoice-data.model';
 import {InvoiceStatus} from './invoice-status.model';
 import {DateTime} from 'luxon';
 import {BillingMethod} from './billing-method.model';
@@ -8,50 +8,19 @@ import {Contract} from './contract';
 import {DateUtility} from '../utils';
 import {InvoiceItem} from './invoice-item';
 import {ContractItem} from './contract-item';
+import {InvoiceFactory} from './invoice-factory';
 
 export class Invoice extends Transaction {
 
     static createFromContract(contract: Contract): Invoice {
-
-        const data: InvoiceData = {
-            ...Invoice.defaultValues(),
-            organization: contract.header.organization,
-            billingMethod: contract.header.billingMethod,
-            cashDiscountDays: contract.header.cashDiscountDays,
-            cashDiscountPercentage: contract.header.cashDiscountPercentage,
-            contractId: contract.header.id,
-            currency: contract.header.currency,
-            dueInDays: contract.header.dueDays,
-            invoiceText: contract.header.invoiceText,
-            issuedAt: DateUtility.getCurrentDate(),
-            paymentMethod: contract.header.paymentMethod,
-            paymentTerms: contract.header.paymentTerms,
-            receiverId: contract.header.customerId,
-            status: InvoiceStatus.created,
-            items: [
-                {
-                    id: 1,
-                    contractItemId: contract.items[0].id,
-                    description: contract.items[0].description,
-                    cashDiscountAllowed: contract.items[0].cashDiscountAllowed,
-                    pricePerUnit: contract.items[0].pricePerUnit,
-                    quantityUnit: contract.items[0].priceUnit,
-                }
-            ]
-        };
-        return Invoice.createFromData(data);
+        return InvoiceFactory.createFromContract(contract);
     }
 
     static createFromData(data: InvoiceData): Invoice {
-        if (!data) {
-            throw new Error('invalid input');
-        }
-        const header = Invoice.extractHeaderFromData(data);
-        const items = data.items ? Invoice.createItemsFromData(data.items) : [];
-        return new Invoice(header, items);
+        return InvoiceFactory.createFromData(data);
     }
 
-   static defaultValues(): any {
+    static defaultValues(): any {
         return {
             objectType: 'invoices',
             issuedAt: DateUtility.getCurrentDate(),
@@ -69,21 +38,7 @@ export class Invoice extends Transaction {
         };
     }
 
-    protected static createItemsFromData(items: InvoiceItemData[]): InvoiceItem[] {
-        if (items.length) {
-            return items
-                .filter(item => !!item)
-                .map(item => InvoiceItem.createFromData(item));
-        }
-        return [];
-    }
-
-    protected static extractHeaderFromData(data: InvoiceData): InvoiceHeaderData {
-        const {items: removed1, ...header} = data;
-        return Object.assign({}, Invoice.defaultValues(), header) as InvoiceHeaderData;
-    }
-
-    private constructor(public header: InvoiceHeaderData, public items: InvoiceItem[]) {
+    constructor(public header: InvoiceHeaderData, public items: InvoiceItem[]) {
         super();
     }
 

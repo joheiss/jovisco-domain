@@ -14,6 +14,7 @@ export * from './contract-summaries';
 export * from './contracts-entity';
 export * from './invoice-status.model';
 export * from './invoice-data.model';
+export * from './invoice-factory';
 export * from './invoice';
 export * from './invoice-item';
 export * from './invoice-summary-data.model';
