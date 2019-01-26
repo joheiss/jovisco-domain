@@ -4,10 +4,12 @@ import {DateUtility} from '../utils';
 import {InvoiceStatus} from './invoice-status.model';
 import {Invoice} from './invoice';
 import {InvoiceItem} from './invoice-item';
+import {InvoiceItemFactory} from './invoice-item-factory';
+import {InvoicesEntity} from './invoices-entity';
 
 export class InvoiceFactory {
 
-    static createFromContract(contract: Contract): Invoice {
+    static fromContract(contract: Contract): Invoice {
 
         const data: InvoiceData = {
             ...Invoice.defaultValues(),
@@ -35,34 +37,39 @@ export class InvoiceFactory {
                 }
             ]
         };
-        return InvoiceFactory.createFromData(data);
+        return InvoiceFactory.fromData(data);
     }
 
-    static createFromData(data: InvoiceData): Invoice {
+    static fromData(data: InvoiceData): Invoice {
         if (!data) {
             throw new Error('invalid input');
         }
         const header = InvoiceFactory.extractHeaderFromData(data);
         console.log('header: ', header);
-        const items = data.items ? InvoiceFactory.createItemsFromData(data.items) : [];
+        const items = data.items ? InvoiceFactory.itemsFromData(data.items) : [];
         return new Invoice(header, items);
     }
 
-    protected static createItemsFromData(items: InvoiceItemData[]): InvoiceItem[] {
+    static fromEntity(entity: InvoicesEntity): Invoice[] {
+        return Object.keys(entity).map(id => InvoiceFactory.fromData(entity[id]));
+    }
+
+    protected static itemsFromData(items: InvoiceItemData[]): InvoiceItem[] {
         if (items.length) {
             return items
                 .filter(item => !!item)
-                .map(item => InvoiceItem.createFromData(item));
+                .map(item => InvoiceItemFactory.fromData(item));
         }
         return [];
     }
 
     protected static extractHeaderFromData(data: InvoiceData): InvoiceHeaderData {
-        console.log('extract header - data: ', data);
+        // console.log('extract header - data: ', data);
         const {items: removed1, ...header} = data;
-        console.log('extract header: ', header);
+        // console.log('extract header: ', header);
+        // const result = Object.assign({}, Invoice.defaultValues(), header) as InvoiceHeaderData;
         const result = Object.assign({}, { ...Invoice.defaultValues()}, {...header}) as InvoiceHeaderData;
-        console.log('extract header - result ', result);
+        // console.log('extract header - result ', result);
         return result;
     }
 

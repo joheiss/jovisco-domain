@@ -2,15 +2,16 @@ import {
     BillingMethod,
     Contract,
     ContractData,
-    ContractsEntity, ContractSummaries,
+    ContractFactory,
+    ContractsEntity,
     ContractSummariesData,
+    ContractSummariesFactory,
+    ContractTermFactory,
     PaymentMethod
 } from '../lib/invoicing';
 import {DateTime} from 'luxon';
-import {DateUtility} from '../lib/utils';
 import {mockReceiversEntity} from './mock-receiver.factory';
 import {mockInvoicesEntity} from './mock-invoice.factory';
-import {ContractTerm} from '../lib/invoicing/contract-term';
 
 export const mockContract = (): Contract => {
     const issuedAt = DateTime.local().minus({ months: 1});
@@ -18,7 +19,7 @@ export const mockContract = (): Contract => {
         id: '4901',
         organization: 'GHQ',
         billingMethod: BillingMethod.Invoice,
-        term: ContractTerm.getNextDefaultTerm(issuedAt.toJSDate()),
+        term: ContractTermFactory.nextDefaultTerm(issuedAt.toJSDate()),
         budget: 1234.56,
         cashDiscountDays: 30,
         cashDiscountPercentage: 3,
@@ -35,7 +36,7 @@ export const mockContract = (): Contract => {
             {id: 1, cashDiscountAllowed: true, description: 'Arbeitszeit', pricePerUnit: 123.45, priceUnit: 'Std.'}
         ]
     };
-    return Contract.createFromData(data);
+    return ContractFactory.fromData(data);
 };
 
 export const mockAllContracts = (): ContractData[] => {
@@ -89,7 +90,7 @@ const getBaseContract = (id: number, issuedAt: Date, description: string, custom
         organization: 'THQ',
         description: description,
         customerId: customerId,
-        term: ContractTerm.create(startDate, endDate),
+        term: ContractTermFactory.fromDates(startDate, endDate),
         paymentTerms: cashDiscount ? '30 Tage: 3 % Skonto; 60 Tage: netto' : '30 Tage: netto',
         paymentMethod: PaymentMethod.BankTransfer,
         billingMethod: billingMethod,
@@ -122,5 +123,5 @@ export const mockContractSummaries = (): ContractSummariesData => {
     const contracts = mockContractsEntity();
     const receivers = mockReceiversEntity();
     const invoices = mockInvoicesEntity();
-    return ContractSummaries.create(receivers, contracts, invoices);
+    return ContractSummariesFactory.create(receivers, contracts, invoices);
 };

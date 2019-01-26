@@ -4,10 +4,6 @@ import {ContractItem} from './contract-item';
 
 export class InvoiceItem extends TransactionItem {
 
-    static createFromData(data: InvoiceItemData): InvoiceItem {
-        return new InvoiceItem(data);
-    }
-
     static defaultValues(): any {
         return {
             quantity: 0,
@@ -16,7 +12,7 @@ export class InvoiceItem extends TransactionItem {
         } as InvoiceItemData;
     }
 
-    private constructor(protected _data: InvoiceItemData) {
+    constructor(protected _data: InvoiceItemData) {
         super(_data);
         this.fill(_data);
     }

@@ -4,11 +4,7 @@ import {DateTime} from 'luxon';
 
 export class Revenue {
 
-    public static createFromData(data: RevenueData): Revenue {
-        return new Revenue(data);
-    }
-
-    public static calculateTotalRevenuesPerYear(revenues: Revenue[]): RevenuePerYearData[] {
+    static calculateTotalRevenuesPerYear(revenues: Revenue[]): RevenuePerYearData[] {
 
         const revenueMatrix = Revenue.initializeRevenuePerYear();
 
@@ -22,7 +18,7 @@ export class Revenue {
         return revenueMatrix;
     }
 
-    public static calculateRevenuePeriod(date: Date): { year: number, month: number } {
+    static calculateRevenuePeriod(date: Date): { year: number, month: number } {
         const dt = DateTime.fromJSDate(date);
         if (dt.day > 15) {
             return { year: dt.year, month: dt.month };

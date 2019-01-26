@@ -4,18 +4,14 @@ import {BusinessObject} from '../invoicing';
 
 export class DocumentLink {
 
-    public static createFromData(data: DocumentLinkData): DocumentLink {
-        return new DocumentLink(data);
-    }
-
-    public static defaultValues(): DocumentLinkData {
+    static defaultValues(): DocumentLinkData {
         return {
             attachToEmail: false,
             type: DocumentLinkType.Other
         };
     }
 
-    public static getOwnerFromBo(object: BusinessObject): string {
+    static getOwnerFromBo(object: BusinessObject): string {
         return object.ownerKey;
     }
 

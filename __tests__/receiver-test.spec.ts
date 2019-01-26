@@ -1,23 +1,23 @@
-import {MasterdataStatus, Receiver, ReceiverData} from '../lib/invoicing';
+import {MasterdataStatus, Receiver, ReceiverData, ReceiverFactory} from '../lib/invoicing';
 import {mockReceiver} from './mock-receiver.factory';
 
 describe('receiver tests', () => {
 
     it('should create a receiver from default values', () => {
-        const receiver = Receiver.createFromData(Receiver.defaultValues());
+        const receiver = ReceiverFactory.fromData(Receiver.defaultValues());
         expect(receiver).toBeTruthy();
     });
 
     it('should create a receiver containing default values, if an empty object has been provided', () => {
         const data = {} as ReceiverData;
-        const receiver = Receiver.createFromData(data);
+        const receiver = ReceiverFactory.fromData(data);
         expect(receiver).toBeTruthy();
         expect(receiver.data).toEqual(Receiver.defaultValues());
     });
 
     it('should create a receiver from mock data', () => {
         const data = mockReceiver().data;
-        const receiver = Receiver.createFromData(data);
+        const receiver = ReceiverFactory.fromData(data);
         expect(receiver).toBeTruthy();
         expect(receiver.data).toEqual(data);
     });
@@ -28,7 +28,7 @@ describe('receiver tests', () => {
 
         beforeEach(() => {
             const data = mockReceiver().data;
-            receiver = Receiver.createFromData(data);
+            receiver = ReceiverFactory.fromData(data);
         });
 
         it('should return true if receiver is active, false if it is inactive', () => {

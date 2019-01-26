@@ -3,23 +3,11 @@ import {ReceiversEntity} from './receivers-entity';
 import {InvoicesEntity} from './invoices-entity';
 import {Invoice} from './invoice';
 import {ContractSummaryData} from './contract-summary-data.model';
+import {InvoiceFactory} from './invoice-factory';
 
 export class ContractSummary {
 
-    static create(contract: Contract): ContractSummary {
-
-        const data = {
-            object: contract,
-            receiverName: '',
-            revenue: 0,
-            changeable: false,
-            lastInvoiceId: ''
-        };
-
-        return new ContractSummary(data);
-    }
-
-    private constructor(private _data: ContractSummaryData) {
+    constructor(private _data: ContractSummaryData) {
     }
 
     get object(): Contract {
@@ -58,7 +46,7 @@ export class ContractSummary {
         Object.keys(invoices)
             .filter(invoiceId => invoices[invoiceId].contractId === this._data.object.header.id)
             .forEach(invoiceId => {
-                const invoice = Invoice.createFromData(invoices[invoiceId]);
+                const invoice = InvoiceFactory.fromData(invoices[invoiceId]);
                 // calculate revenue
                 this._data.revenue = this._data.revenue + invoice.netValue;
                 // get last invoice Id

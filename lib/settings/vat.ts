@@ -5,7 +5,7 @@ import {DateUtility} from '../utils';
 
 export class Vat {
 
-    public static findVatPercentage(vatSettings: SettingData, taxCode: string, issuedAt: Date): number {
+    static findVatPercentage(vatSettings: SettingData, taxCode: string, issuedAt: Date): number {
 
         return vatSettings.values
             .find((vatSetting: VatData) => vatSetting.taxCode === taxCode && Vat.isValid(vatSetting, issuedAt))

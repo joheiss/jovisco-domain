@@ -2,14 +2,7 @@ import {UserData} from './user-data.model';
 
 export class User {
 
-    public static createFromData(data: UserData): User {
-        if (!data) {
-            throw new Error('invalid input');
-        }
-        return new User(data);
-    }
-
-    public static defaultValues(): any {
+    static defaultValues(): any {
         return {
             isLocked: false,
             roles: []

@@ -3,9 +3,9 @@ import {
     Invoice,
     InvoiceData,
     InvoicesEntity,
-    InvoiceStatus, InvoiceSummaries,
+    InvoiceStatus, InvoiceSummariesFactory,
     InvoiceSummariesData,
-    PaymentMethod
+    PaymentMethod, InvoiceFactory
 } from '../lib/invoicing';
 import {DateUtility} from '../lib/utils';
 import {Revenue} from '../lib/reporting';
@@ -47,7 +47,7 @@ export const mockInvoice = (): Invoice => {
             }
         ]
     };
-    return Invoice.createFromData(data);
+    return InvoiceFactory.fromData(data);
 };
 
 export const mockAllInvoices = (): InvoiceData[] => {
@@ -139,6 +139,6 @@ export const mockInvoicesEntity = (): InvoicesEntity => {
 export const mockInvoiceSummaries = (): InvoiceSummariesData => {
     const receivers = mockReceiversEntity();
     const invoices = mockInvoicesEntity();
-    return InvoiceSummaries.create(receivers, invoices);
+    return InvoiceSummariesFactory.create(receivers, invoices);
 };
 

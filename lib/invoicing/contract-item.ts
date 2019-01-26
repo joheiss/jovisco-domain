@@ -3,10 +3,6 @@ import {ContractItemData} from './contract-data.model';
 
 export class ContractItem extends TransactionItem {
 
-    static createFromData(data: ContractItemData): ContractItem {
-        return new ContractItem(data);
-    }
-
     static defaultValues(): any {
         return {
             pricePerUnit: 0,
@@ -14,7 +10,7 @@ export class ContractItem extends TransactionItem {
         };
     }
 
-    private constructor(protected _data: ContractItemData) {
+    constructor(protected _data: ContractItemData) {
         super(_data);
         this.fill(_data);
     }

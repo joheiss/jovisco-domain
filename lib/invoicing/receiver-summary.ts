@@ -1,9 +1,9 @@
 import {Receiver} from './receiver';
 import {ContractsEntity} from './contracts-entity';
 import {InvoicesEntity} from './invoices-entity';
-import {Contract} from './contract';
-import {Invoice} from './invoice';
 import {ReceiverSummaryData} from './receiver-summary-data.model';
+import {ContractFactory} from './contract-factory';
+import {InvoiceFactory} from './invoice-factory';
 
 export class ReceiverSummary {
 
@@ -22,7 +22,7 @@ export class ReceiverSummary {
         return new ReceiverSummary(data);
     }
 
-    private constructor(private _data: ReceiverSummaryData) {
+    constructor(private _data: ReceiverSummaryData) {
     }
 
     get object(): Receiver {
@@ -67,7 +67,7 @@ export class ReceiverSummary {
         Object.keys(contracts)
             .filter(contractId => contracts[contractId].customerId === this._data.object.header.id)
             .forEach(contractId => {
-                const contract = Contract.createFromData(contracts[contractId]);
+                const contract = ContractFactory.fromData(contracts[contractId]);
                 // get counts for active and expired contracts
                 if (contract.term.isActive || contract.term.isFuture) {
                     ++this._data.activeContractsCount;
@@ -88,7 +88,7 @@ export class ReceiverSummary {
         Object.keys(invoices)
             .filter(invoiceId => invoices[invoiceId].receiverId === this._data.object.header.id)
             .forEach(invoiceId => {
-                const invoice = Invoice.createFromData(invoices[invoiceId]);
+                const invoice = InvoiceFactory.fromData(invoices[invoiceId]);
                 // get counts for open and due invoices
                 if (invoice.isDue()) {
                     this._data.dueInvoicesCount++;

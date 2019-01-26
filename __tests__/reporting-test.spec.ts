@@ -1,4 +1,4 @@
-import {Revenue} from '../lib/reporting';
+import {Revenue, RevenueFactory} from '../lib/reporting';
 import {inspect} from 'util';
 
 describe('reporting tests', () => {
@@ -47,5 +47,5 @@ const mockRevenue = (year: string): Revenue => {
             '12': { '1901': 1000.00, '1902': 9000.00 }
         }
     };
-    return Revenue.createFromData(data);
+    return RevenueFactory.fromData(data);
 };

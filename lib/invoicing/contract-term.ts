@@ -3,16 +3,6 @@ import {DateTime} from 'luxon';
 
 export class ContractTerm {
 
-    static create(startDate: Date, endDate: Date): ContractTerm {
-        return new ContractTerm(DateUtility.getStartDate(startDate), DateUtility.getEndDate(endDate));
-    }
-
-    static getNextDefaultTerm(date: Date): ContractTerm {
-        const start = DateTime.fromJSDate(date).plus({ months: 1}).startOf('month').toJSDate();
-        const end = DateTime.fromJSDate(start).plus({ months: 2}).endOf('month').toJSDate();
-        return new ContractTerm(start, end);
-    }
-
     constructor(private _startDate: Date, private _endDate: Date) {}
 
     get startDate(): Date {

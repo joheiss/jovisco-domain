@@ -1,5 +1,5 @@
 import {DocumentLink} from '../lib/documents/document-link';
-import {DocumentLinkType} from '../lib/documents';
+import {DocumentLinkFactory, DocumentLinkType} from '../lib/documents';
 
 describe('documents tests', () => {
 
@@ -22,5 +22,5 @@ const mockDocumentLink = (): DocumentLink => {
         attachToEmail: true
     };
 
-    return DocumentLink.createFromData(data);
+    return DocumentLinkFactory.fromData(data);
 };

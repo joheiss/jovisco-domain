@@ -1,22 +1,10 @@
 import {Invoice} from './invoice';
 import {ReceiversEntity} from './receivers-entity';
-import {InvoiceStatus} from './invoice-status.model';
 import {InvoiceSummaryData} from './invoice-summary-data.model';
 
 export class InvoiceSummary {
 
-    static create(invoice: Invoice): InvoiceSummary {
-
-        const data = {
-            object: invoice,
-            receiverName: '',
-            changeable: invoice.header.status === InvoiceStatus.created.valueOf()
-        };
-
-        return new InvoiceSummary(data);
-    }
-
-    private constructor(private _data: InvoiceSummaryData) {
+    constructor(private _data: InvoiceSummaryData) {
     }
 
     get object(): Invoice {

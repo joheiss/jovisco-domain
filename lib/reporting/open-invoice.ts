@@ -1,27 +1,6 @@
 import {OpenInvoiceData} from './open-invoice-data.model';
-import {Invoice} from '../invoicing';
 
 export class OpenInvoice {
-
-    public static createFromData(data: OpenInvoiceData): OpenInvoice {
-        return new OpenInvoice(data);
-    }
-
-    public static mapFromInvoice(invoice: Invoice, receiverName: string): OpenInvoice {
-
-        const data = {
-            id: invoice.header.id,
-            issuedAt: invoice.header.issuedAt,
-            billingPeriod: invoice.header.billingPeriod,
-            receiverId: invoice.header.receiverId,
-            receiverName: receiverName,
-            netValue: invoice.netValue,
-            paymentAmount: invoice.paymentAmount,
-            dueDate: invoice.dueDate
-        } as OpenInvoiceData;
-
-        return OpenInvoice.createFromData(data);
-    }
 
     constructor(private _data: OpenInvoiceData) {}
 

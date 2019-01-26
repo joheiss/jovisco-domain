@@ -1,23 +1,22 @@
-import {Invoice} from './invoice';
 import {InvoicesEntity} from './invoices-entity';
 import {ReceiversEntity} from './receivers-entity';
 import {InvoiceSummaryData} from './invoice-summary-data.model';
-import {InvoiceSummary} from './invoice-summary';
+import {InvoiceSummaryFactory} from './invoice-summary-factory';
+import {InvoiceFactory} from './invoice-factory';
 
 export type InvoiceSummariesData = { [id: string]: InvoiceSummaryData };
 
-export class InvoiceSummaries {
+export class InvoiceSummariesFactory {
 
     static create(receivers: ReceiversEntity, invoices: InvoicesEntity): InvoiceSummariesData {
 
         const summaries = {} as InvoiceSummariesData;
 
         Object.keys(invoices).forEach(invoiceId => {
-            summaries[invoiceId] = InvoiceSummary.create(Invoice.createFromData(invoices[invoiceId]))
+            summaries[invoiceId] = InvoiceSummaryFactory.create(InvoiceFactory.fromData(invoices[invoiceId]))
                 .setReceiverInfos(receivers)
                 .data;
         });
-
         return summaries;
     }
 }

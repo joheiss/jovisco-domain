@@ -3,8 +3,8 @@ import {
     Receiver,
     ReceiverData,
     ReceiversEntity,
-    ReceiverSummaries,
-    ReceiverSummariesData
+    ReceiverSummariesFactory,
+    ReceiverSummariesData, ReceiverFactory
 } from '../lib/invoicing';
 import {mockContractsEntity} from './mock-contract.factory';
 import {mockInvoicesEntity} from './mock-invoice.factory';
@@ -25,7 +25,7 @@ export const mockReceiver = (): Receiver => {
             webSite: 'http://www.test.example.de'
         }
     };
-    return Receiver.createFromData(data);
+    return ReceiverFactory.fromData(data);
 };
 
 export const mockAllReceivers = (): ReceiverData[] => {
@@ -66,6 +66,6 @@ export const mockReceiverSummaries = (): ReceiverSummariesData => {
     const contracts = mockContractsEntity();
     const receivers = mockReceiversEntity();
     const invoices = mockInvoicesEntity();
-    return ReceiverSummaries.create(receivers, contracts, invoices);
+    return ReceiverSummariesFactory.create(receivers, contracts, invoices);
 };
 

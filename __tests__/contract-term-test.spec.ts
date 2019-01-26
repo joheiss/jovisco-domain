@@ -1,12 +1,13 @@
 import {DateTime} from 'luxon';
 import {ContractTerm} from '../lib/invoicing/contract-term';
+import {ContractTermFactory} from '../lib/invoicing';
 
 describe('contract term tests', () => {
 
     it('should create a valid contract term', () => {
         const start = DateTime.local().toJSDate();
         const end = DateTime.local().plus({months: 2}).endOf('month').toJSDate();
-        const term = ContractTerm.create(start, end);
+        const term = ContractTermFactory.fromDates(start, end);
         expect(term).toBeTruthy();
         expect(term.isValid).toBeTruthy();
     });
@@ -14,7 +15,7 @@ describe('contract term tests', () => {
     it('should create an invalid contract term', () => {
         const start = DateTime.local().toJSDate();
         const end = DateTime.local().plus({months: 2}).endOf('month').toJSDate();
-        const term = ContractTerm.create(end, start);
+        const term = ContractTermFactory.fromDates(end, start);
         expect(term).toBeTruthy();
         expect(term.isValid).toBeFalsy();
     });
@@ -22,7 +23,7 @@ describe('contract term tests', () => {
     it('should create an valid contract term of 1 day', () => {
         const start = DateTime.local().toJSDate();
         const end = DateTime.local().toJSDate();
-        const term = ContractTerm.create(start, end);
+        const term = ContractTermFactory.fromDates(start, end);
         expect(term).toBeTruthy();
         expect(term.isValid).toBeTruthy();
         expect(term.durationDays).toBe(1);
@@ -30,7 +31,7 @@ describe('contract term tests', () => {
 
     it('should create a valid next default contract term of 3 months, start at beginning of next month', () => {
         const today = new Date();
-        const term = ContractTerm.getNextDefaultTerm(today);
+        const term = ContractTermFactory.nextDefaultTerm(today);
         expect(term).toBeTruthy();
         expect(term.isValid).toBeTruthy();
         expect(term.durationDays).toBeGreaterThanOrEqual(89);
@@ -45,12 +46,12 @@ describe('contract term tests', () => {
 
         beforeEach(() => {
             today = new Date();
-            term = ContractTerm.create(today, today);
+            term = ContractTermFactory.fromDates(today, today);
         });
 
         it('should set the start date to local time 00:00:00:000 and the end date to 23:59:59:000', () => {
             const aDay = new Date(today.setHours(12, 1, 2, 333));
-            const term = ContractTerm.create(aDay, aDay);
+            const term = ContractTermFactory.fromDates(aDay, aDay);
             expect(term).toBeTruthy();
             expect(term.isValid).toBeTruthy();
             expect(term.startDate).toEqual(DateTime.fromJSDate(aDay).startOf('day').toJSDate());
@@ -77,7 +78,7 @@ describe('contract term tests', () => {
             expect(term.isFuture).toBeFalsy();
             expect(term.isInvoiceable).toBeTruthy();
             const start = DateTime.local().plus({months: 1}).toJSDate();
-            const futureTerm = ContractTerm.create(start, start);
+            const futureTerm = ContractTermFactory.fromDates(start, start);
             expect(futureTerm.isActive).toBeFalsy();
             expect(futureTerm.isExpired).toBeFalsy();
             expect(futureTerm.isFuture).toBeTruthy();
@@ -86,7 +87,7 @@ describe('contract term tests', () => {
 
         it('should return true for isExpired, if term ended before today', () => {
             const start = DateTime.local().minus({months: 1}).toJSDate();
-            const expiredTerm = ContractTerm.create(start, start);
+            const expiredTerm = ContractTermFactory.fromDates(start, start);
             expect(expiredTerm.isExpired).toBeTruthy();
             expect(expiredTerm.isActive).toBeFalsy();
             expect(expiredTerm.isFuture).toBeFalsy();
@@ -95,7 +96,7 @@ describe('contract term tests', () => {
 
         it('should return true for isFuture, if term starts after today', () => {
             const start = DateTime.local().plus({months: 1}).toJSDate();
-            const futureTerm = ContractTerm.create(start, start);
+            const futureTerm = ContractTermFactory.fromDates(start, start);
             expect(futureTerm.isExpired).toBeFalsy();
             expect(futureTerm.isActive).toBeFalsy();
             expect(futureTerm.isFuture).toBeTruthy();
@@ -105,7 +106,7 @@ describe('contract term tests', () => {
         it('should return true for isInvoiceable, if term is active or end of term has expired no onger than 15 days ago', () => {
             let start = DateTime.local().minus({months: 1}).startOf('month').toJSDate();
             let end = DateTime.local().endOf('month').toJSDate();
-            const invoiceableTerm = ContractTerm.create(start, end);
+            const invoiceableTerm = ContractTermFactory.fromDates(start, end);
             expect(invoiceableTerm.isExpired).toBeFalsy();
             expect(invoiceableTerm.isActive).toBeTruthy();
             expect(invoiceableTerm.isFuture).toBeFalsy();

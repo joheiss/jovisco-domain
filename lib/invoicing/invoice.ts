@@ -8,17 +8,9 @@ import {Contract} from './contract';
 import {DateUtility} from '../utils';
 import {InvoiceItem} from './invoice-item';
 import {ContractItem} from './contract-item';
-import {InvoiceFactory} from './invoice-factory';
+import {InvoiceItemFactory} from './invoice-item-factory';
 
 export class Invoice extends Transaction {
-
-    static createFromContract(contract: Contract): Invoice {
-        return InvoiceFactory.createFromContract(contract);
-    }
-
-    static createFromData(data: InvoiceData): Invoice {
-        return InvoiceFactory.createFromData(data);
-    }
 
     static defaultValues(): any {
         return {
@@ -115,7 +107,7 @@ export class Invoice extends Transaction {
     }
 
     buildNewItemFromTemplate(): InvoiceItem {
-        return InvoiceItem.createFromData({
+        return InvoiceItemFactory.fromData({
             ...InvoiceItem.defaultValues(),
             id: this.getNextItemId(),
             vatPercentage: this.vatPercentage
@@ -157,7 +149,7 @@ export class Invoice extends Transaction {
         } else {
             const contractItem: ContractItem = contract.getItem(1);
             if (contractItem) {
-                const item: InvoiceItem = InvoiceItem.createFromData({
+                const item: InvoiceItem = InvoiceItemFactory.fromData({
                     id: 1,
                     contractItemId: contractItem.id,
                     description: contractItem.description,

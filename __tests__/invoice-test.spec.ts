@@ -1,4 +1,12 @@
-import {ContractItem, Invoice, InvoiceData, InvoiceItem, InvoiceStatus} from '../lib/invoicing';
+import {
+    ContractItem,
+    Invoice,
+    InvoiceData,
+    InvoiceFactory,
+    InvoiceItem,
+    InvoiceItemFactory,
+    InvoiceStatus
+} from '../lib/invoicing';
 import {mockContract} from './mock-contract.factory';
 import {DateTime} from 'luxon';
 import {mockInvoice} from './mock-invoice.factory';
@@ -6,20 +14,20 @@ import {mockInvoice} from './mock-invoice.factory';
 describe('invoice tests', () => {
 
     it('should create an invoice from default values', () => {
-        const invoice = Invoice.createFromData(Invoice.defaultValues());
+        const invoice = InvoiceFactory.fromData(Invoice.defaultValues());
         expect(invoice).toBeTruthy();
     });
 
     it('should create an invoice containing default values, if an empty object has been provided', () => {
         const data = {} as InvoiceData;
-        const invoice = Invoice.createFromData(data);
+        const invoice = InvoiceFactory.fromData(data);
         expect(invoice).toBeTruthy();
         expect(invoice.data).toEqual(Invoice.defaultValues());
     });
 
     it('should create an invoice from a contract', () => {
         const contract = mockContract();
-        const invoice = Invoice.createFromContract(contract);
+        const invoice = InvoiceFactory.fromContract(contract);
         expect(invoice).toBeTruthy();
         expect(invoice.items).toHaveLength(1);
         expect(invoice.header.receiverId).toEqual(contract.header.customerId);
@@ -39,7 +47,7 @@ describe('invoice tests', () => {
     });
 
     it('should create an invoice from mock data', () => {
-        const invoice = Invoice.createFromData(mockInvoice().data);
+        const invoice = InvoiceFactory.fromData(mockInvoice().data);
         expect(invoice).toBeTruthy();
         expect(invoice.data).toEqual(mockInvoice().data);
     });
@@ -50,7 +58,7 @@ describe('invoice tests', () => {
 
         beforeEach(() => {
             const data = mockInvoice().data;
-            invoice = Invoice.createFromData(data);
+            invoice = InvoiceFactory.fromData(data);
         });
 
         it('should return the correct cash discount amount', () => {
@@ -165,21 +173,21 @@ describe('invoice tests', () => {
                 vatPercentage: 19.0,
                 cashDiscountAllowed: true
             };
-            const item = InvoiceItem.createFromData(data);
+            const item = InvoiceItemFactory.fromData(data);
             expect(item).toBeTruthy();
             expect(item.data).toEqual(data);
         });
 
         it('should create an item from empty data', () => {
             const data = {};
-            const item = InvoiceItem.createFromData(data);
+            const item = InvoiceItemFactory.fromData(data);
             expect(item).toBeTruthy();
             expect(item.data).toEqual(InvoiceItem.defaultValues());
         });
 
         it('should create an item from default values', () => {
             const data = InvoiceItem.defaultValues();
-            const item = InvoiceItem.createFromData(data);
+            const item = InvoiceItemFactory.fromData(data);
             expect(item).toBeTruthy();
             expect(item.data).toEqual(InvoiceItem.defaultValues());
         });
