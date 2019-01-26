@@ -1,5 +1,6 @@
 import {UserData} from './user-data.model';
 import {User} from './user';
+import {UsersEntity} from './users-entity';
 
 export class UserFactory {
 
@@ -9,5 +10,10 @@ export class UserFactory {
         }
         return new User(data);
     }
+
+    static fromEntity(entity: UsersEntity): User[] {
+        return Object.keys(entity).map(id => UserFactory.fromData(entity[id]));
+    }
+
 
 }
