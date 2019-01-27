@@ -9,7 +9,7 @@ export type ContractSummariesData = { [id: string]: ContractSummaryData };
 
 export class ContractSummariesFactory {
 
-    static create(receivers: ReceiversEntity, contracts: ContractsEntity, invoices: InvoicesEntity): ContractSummariesData {
+    static fromEntities(receivers: ReceiversEntity, contracts: ContractsEntity, invoices: InvoicesEntity): ContractSummariesData {
 
         const summaries = {} as ContractSummariesData;
 

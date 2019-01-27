@@ -66,6 +66,6 @@ export const mockReceiverSummaries = (): ReceiverSummariesData => {
     const contracts = mockContractsEntity();
     const receivers = mockReceiversEntity();
     const invoices = mockInvoicesEntity();
-    return ReceiverSummariesFactory.create(receivers, contracts, invoices);
+    return ReceiverSummariesFactory.fromEntities(receivers, contracts, invoices);
 };
 

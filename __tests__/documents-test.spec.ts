@@ -1,4 +1,4 @@
-import {DocumentLink} from '../lib/documents/document-link';
+import {DocumentLink} from '../lib/documents';
 import {DocumentLinkFactory, DocumentLinkType} from '../lib/documents';
 
 describe('documents tests', () => {

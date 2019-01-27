@@ -8,7 +8,7 @@ export type InvoiceSummariesData = { [id: string]: InvoiceSummaryData };
 
 export class InvoiceSummariesFactory {
 
-    static create(receivers: ReceiversEntity, invoices: InvoicesEntity): InvoiceSummariesData {
+    static fromEntities(receivers: ReceiversEntity, invoices: InvoicesEntity): InvoiceSummariesData {
 
         const summaries = {} as InvoiceSummariesData;
 

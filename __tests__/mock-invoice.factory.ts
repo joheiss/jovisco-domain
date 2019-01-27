@@ -139,6 +139,6 @@ export const mockInvoicesEntity = (): InvoicesEntity => {
 export const mockInvoiceSummaries = (): InvoiceSummariesData => {
     const receivers = mockReceiversEntity();
     const invoices = mockInvoicesEntity();
-    return InvoiceSummariesFactory.create(receivers, invoices);
+    return InvoiceSummariesFactory.fromEntities(receivers, invoices);
 };
 
