@@ -14,7 +14,8 @@ export class ReceiverSummariesFactory {
         const summaries = {} as ReceiverSummariesData;
 
         Object.keys(receivers).forEach(receiverId => {
-            summaries[receiverId] = ReceiverSummaryFactory.create(ReceiverFactory.fromData(receivers[receiverId]))
+            summaries[receiverId] = ReceiverSummaryFactory
+                .fromReceiver(ReceiverFactory.fromData(receivers[receiverId]))
                 .setContractInfos(contracts)
                 .setInvoiceInfos(invoices)
                 .data;

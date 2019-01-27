@@ -1,9 +1,8 @@
 import {Contract} from './contract';
-import {InvoiceData, InvoiceHeaderData, InvoiceItemData} from './invoice-data.model';
+import {InvoiceData, InvoiceHeaderData} from './invoice-data.model';
 import {DateUtility} from '../utils';
 import {InvoiceStatus} from './invoice-status.model';
 import {Invoice} from './invoice';
-import {InvoiceItem} from './invoice-item';
 import {InvoiceItemFactory} from './invoice-item-factory';
 import {InvoicesEntity} from './invoices-entity';
 
@@ -46,22 +45,18 @@ export class InvoiceFactory {
         }
         const header = InvoiceFactory.extractHeaderFromData(data);
         console.log('header: ', header);
-        const items = data.items ? InvoiceFactory.itemsFromData(data.items) : [];
+        const items = data.items ? InvoiceItemFactory.fromDataArray(data.items) : [];
         return new Invoice(header, items);
+    }
+
+    static fromDataArray(invoices: InvoiceData []): Invoice[] {
+        return invoices.map(i => InvoiceFactory.fromData(i));
     }
 
     static fromEntity(entity: InvoicesEntity): Invoice[] {
         return Object.keys(entity).map(id => InvoiceFactory.fromData(entity[id]));
     }
 
-    protected static itemsFromData(items: InvoiceItemData[]): InvoiceItem[] {
-        if (items.length) {
-            return items
-                .filter(item => !!item)
-                .map(item => InvoiceItemFactory.fromData(item));
-        }
-        return [];
-    }
 
     protected static extractHeaderFromData(data: InvoiceData): InvoiceHeaderData {
         // console.log('extract header - data: ', data);

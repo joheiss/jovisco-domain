@@ -3,7 +3,7 @@ import {ReceiverSummary} from './receiver-summary';
 
 export class ReceiverSummaryFactory {
 
-    static create(receiver: Receiver): ReceiverSummary {
+    static fromReceiver(receiver: Receiver): ReceiverSummary {
 
         const data = {
             object: receiver,

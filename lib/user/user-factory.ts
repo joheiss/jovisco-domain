@@ -11,6 +11,10 @@ export class UserFactory {
         return new User(data);
     }
 
+    static fromDataArray(users: UserData []): User[] {
+        return users.map(u => UserFactory.fromData(u));
+    }
+
     static fromEntity(entity: UsersEntity): User[] {
         return Object.keys(entity).map(id => UserFactory.fromData(entity[id]));
     }

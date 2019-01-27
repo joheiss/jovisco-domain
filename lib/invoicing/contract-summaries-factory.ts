@@ -14,7 +14,8 @@ export class ContractSummariesFactory {
         const summaries = {} as ContractSummariesData;
 
         Object.keys(contracts).forEach(contractId => {
-            summaries[contractId] = ContractSummaryFactory.create(ContractFactory.fromData(contracts[contractId]))
+            summaries[contractId] = ContractSummaryFactory
+                .fromContract(ContractFactory.fromData(contracts[contractId]))
                 .setReceiverInfos(receivers)
                 .setInvoiceInfos(invoices)
                 .data;

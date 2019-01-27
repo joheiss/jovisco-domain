@@ -1,7 +1,6 @@
 import {Contract} from './contract';
 import {ReceiversEntity} from './receivers-entity';
 import {InvoicesEntity} from './invoices-entity';
-import {Invoice} from './invoice';
 import {ContractSummaryData} from './contract-summary-data.model';
 import {InvoiceFactory} from './invoice-factory';
 

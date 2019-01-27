@@ -1,5 +1,4 @@
 import {RevenueData} from './revenue-data.model';
-import {RevenuePerYearData} from './revenue-per-year-data.model';
 import {Revenue} from './revenue';
 
 export class RevenueFactory {
@@ -8,4 +7,7 @@ export class RevenueFactory {
         return new Revenue(data);
     }
 
+    static fromDataArray(revenues: RevenueData []): Revenue[] {
+        return revenues.map(r => RevenueFactory.fromData(r));
+    }
 }

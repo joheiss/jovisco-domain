@@ -3,7 +3,7 @@ import {ContractSummary} from './contract-summary';
 
 export class ContractSummaryFactory {
 
-    static create(contract: Contract): ContractSummary {
+    static fromContract(contract: Contract): ContractSummary {
 
         const data = {
             object: contract,

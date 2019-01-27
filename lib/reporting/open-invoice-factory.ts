@@ -8,6 +8,10 @@ export class OpenInvoiceFactory {
         return new OpenInvoice(data);
     }
 
+    static fromDataArray(openInvoices: OpenInvoiceData []): OpenInvoice[] {
+        return openInvoices.map(oi => OpenInvoiceFactory.fromData(oi));
+    }
+
     static fromInvoice(invoice: Invoice, receiverName: string): OpenInvoice {
 
         const data = {

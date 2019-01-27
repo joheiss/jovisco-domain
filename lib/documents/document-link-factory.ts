@@ -6,4 +6,8 @@ export class DocumentLinkFactory {
     static fromData(data: DocumentLinkData): DocumentLink {
         return new DocumentLink(data);
     }
+
+    static fromDataArray(docLinks: DocumentLinkData []): DocumentLink[] {
+        return docLinks.map(dl => DocumentLinkFactory.fromData(dl));
+    }
 }

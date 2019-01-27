@@ -11,22 +11,16 @@ export class ContractFactory {
             throw new Error('invalid input');
         }
         const header = ContractFactory.extractHeaderFromData(data);
-        const items = data.items ? ContractFactory.itemsFromData(data.items) : [];
+        const items = data.items ? ContractItemFactory.fromDataArray(data.items) : [];
         return new Contract(header, items);
+    }
+
+    static fromDataArray(contracts: ContractData []): Contract[] {
+        return contracts.map(c => ContractFactory.fromData(c));
     }
 
     static fromEntity(entity: ContractsEntity): Contract[] {
         return Object.keys(entity).map(id => ContractFactory.fromData(entity[id]));
-    }
-
-    private static itemsFromData(items: ContractItemData[]): ContractItem[] {
-        if (items.length) {
-            return items
-                .filter(item => !!item)
-                .map(item => ContractItemFactory.fromData(item));
-        } else {
-            return [];
-        }
     }
 
     private static extractHeaderFromData(data: ContractData): ContractHeaderData {

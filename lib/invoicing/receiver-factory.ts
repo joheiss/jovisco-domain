@@ -13,6 +13,10 @@ export class ReceiverFactory {
         return new Receiver(header, address);
     }
 
+    static fromDataArray(receivers: ReceiverData []): Receiver[] {
+        return receivers.map(r => ReceiverFactory.fromData(r));
+    }
+
     static fromEntity(entity: ReceiversEntity): Receiver[] {
         return Object.keys(entity).map(id => ReceiverFactory.fromData(entity[id]));
     }
@@ -27,5 +31,4 @@ export class ReceiverFactory {
         const {address: ignore2, ...defaultValues} = Receiver.defaultValues();
         return Object.assign({}, defaultValues, header) as ReceiverHeaderData;
     }
-
 }

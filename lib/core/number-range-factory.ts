@@ -9,4 +9,8 @@ export class NumberRangeFactory {
         }
         return new NumberRange(data);
     }
+
+    static fromDataArray(numberRanges: NumberRangeData []): NumberRange[] {
+        return numberRanges.map(nr => NumberRangeFactory.fromData(nr));
+    }
 }

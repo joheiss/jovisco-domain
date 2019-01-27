@@ -13,7 +13,8 @@ export class InvoiceSummariesFactory {
         const summaries = {} as InvoiceSummariesData;
 
         Object.keys(invoices).forEach(invoiceId => {
-            summaries[invoiceId] = InvoiceSummaryFactory.create(InvoiceFactory.fromData(invoices[invoiceId]))
+            summaries[invoiceId] = InvoiceSummaryFactory
+                .fromInvoice(InvoiceFactory.fromData(invoices[invoiceId]))
                 .setReceiverInfos(receivers)
                 .data;
         });
