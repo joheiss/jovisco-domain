@@ -7,9 +7,11 @@ export class Vat {
 
     static findVatPercentage(vatSettings: SettingData, taxCode: string, issuedAt: Date): number {
 
-        return vatSettings.values
+        const percentage = vatSettings.values
             .find((vatSetting: VatData) => vatSetting.taxCode === taxCode && Vat.isValid(vatSetting, issuedAt))
             .percentage;
+        console.log('Vat percentage found: ', percentage);
+        return percentage;
     }
 
     private static isValid(vatSetting: VatData, issuedAt: Date): boolean {
