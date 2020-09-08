@@ -1,41 +1,41 @@
 {
-  "name": "jovisco-domain",
-  "version": "1.0.68",
-  "description": "JOVISCO Domain",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "scripts": {
-    "build": "tsc",
-    "test": "jest",
-    "pkg:version": "npm version patch",
-    "pkg:publish": "npm publish"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/joheiss/jovisco-domain.git"
-  },
-  "keywords": [
-    "jovisco",
-    "domain",
-    "typescript"
-  ],
-  "author": "Josef Heiss",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/joheiss/jovisco-domain/issues"
-  },
-  "homepage": "https://github.com/joheiss/jovisco-domain#readme",
-  "devDependencies": {
-    "@types/jest": "^23.3.12",
-    "@types/lodash": "^4.14.119",
-    "@types/luxon": "^1.4.1",
-    "@types/node": "^10.12.18",
-    "jest": "^23.6.0",
-    "ts-jest": "^23.10.5",
-    "typescript": "^3.2.2"
-  },
-  "dependencies": {
-    "lodash": "^4.17.11",
-    "luxon": "^1.10.0"
-  }
+    "name": "jovisco-domain",
+    "version": "1.0.68",
+    "description": "JOVISCO Domain",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "scripts": {
+        "build": "tsc",
+        "test": "jest",
+        "pkg:version": "npm version patch",
+        "pkg:publish": "npm publish"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/joheiss/jovisco-domain.git"
+    },
+    "keywords": [
+        "jovisco",
+        "domain",
+        "typescript"
+    ],
+    "author": "Josef Heiss",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/joheiss/jovisco-domain/issues"
+    },
+    "homepage": "https://github.com/joheiss/jovisco-domain#readme",
+    "devDependencies": {
+        "@types/jest": "^26.0.13",
+        "@types/lodash": "^4.14.161",
+        "@types/luxon": "^1.24.4",
+        "@types/node": "^14.6.4",
+        "jest": "^26.4.2",
+        "ts-jest": "^26.3.0",
+        "typescript": "^4.0.2"
+    },
+    "dependencies": {
+        "lodash": "^4.17.20",
+        "luxon": "^1.25.0"
+    }
 }
