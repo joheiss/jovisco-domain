@@ -26,42 +26,6 @@ describe('test date utility', () => {
         expect(DateUtility.getEndDate(inputDate)).toEqual(expectedDate);
     });
 
-    it('should return a default start date - beginning of month, time: 00:00:00:000', () => {
-        const date = new Date(2019, 0, 15);
-        expect(DateUtility.getDefaultNextPeriodStartDate(date)).toEqual(new Date(2019, 1, 1, 0, 0, 0, 0));
-    });
-
-    it('should return a default end date - end of month, time: 23:59:59:999', () => {
-        const date = new Date(2019, 0, 15);
-        expect(DateUtility.getDefaultNextPeriodEndDate(date)).toEqual(new Date(2019, 3, 30, 23, 59, 59, 999));
-    });
-
-    it('should return a duration >= 89 days and <= 92 days', () => {
-        const issuedAt = new Date(2019, 0, 15);
-        const startDate = DateUtility.getDefaultNextPeriodStartDate(issuedAt);
-        const endDate = DateUtility.getDefaultNextPeriodEndDate(issuedAt);
-        expect(DateUtility.getDurationInDays(startDate, endDate)).toBeGreaterThanOrEqual(89);
-        expect(DateUtility.getDurationInDays(startDate, endDate)).toBeLessThanOrEqual(92);
-    });
-
-    it('should return a time zone independent date', () => {
-        const issuedAt = new Date(Date.UTC(2019, 0, 15));
-        const moment = 1547938800000;
-        const date1 = DateTime.fromMillis(moment);
-        console.log('full date: ', date1.toISO());
-        const date2 = DateUtility.getDateFromMoment(moment);
-        console.log('issued at: ', DateTime.fromJSDate(date2).toISO());
-        const date3 = DateUtility.getStartDateFromMoment(moment);
-        console.log('start date: ', DateTime.fromJSDate(date3).toISO());
-        const date4 = DateUtility.getEndDateFromMoment(moment);
-        console.log('start date: ', DateTime.fromJSDate(date4).toISO());
-        const locale = 'de-DE';
-        const options = {
-            timeZone: 'UTC'
-        };
-        console.log('Date: ', issuedAt.toLocaleDateString(locale, options));
-        console.log('Date: ', issuedAt.toLocaleString(locale, options));
-    });
 });
 
 describe('object utility tests', () => {

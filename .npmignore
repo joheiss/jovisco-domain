@@ -1,5 +1,5 @@
 lib/
-tests/
+__tests__/
 .travis.yml
 .idea/
 jest-config.js

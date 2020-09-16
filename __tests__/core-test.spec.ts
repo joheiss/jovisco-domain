@@ -1,5 +1,5 @@
 import {inspect} from "util";
-import {NumberRange, NumberRangeData} from '../lib/core';
+import {NumberRange, NumberRangeData, NumberRangeFactory} from '../lib/core';
 
 describe('number range tests', () => {
     it('should create a number range', () => {
@@ -21,6 +21,6 @@ const mockNumberRange = (): NumberRange => {
         startAtId: '99000',
         endAtId: '99999',
     };
-    return NumberRange.createFromData(data);
+    return NumberRangeFactory.fromData(data);
 };
 

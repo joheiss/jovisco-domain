@@ -1,6 +1,7 @@
 import {TransactionHeaderData, TransactionItemData} from './transaction-data.model';
 import {PaymentMethod} from './payment-method.model';
 import {BillingMethod} from './billing-method.model';
+import {ContractTerm} from './contract-term';
 
 export interface ContractData extends ContractHeaderData {
     items: ContractItemData[];
@@ -8,9 +9,8 @@ export interface ContractData extends ContractHeaderData {
 
 export interface ContractHeaderData extends TransactionHeaderData {
     description?: string;
-    customerId?: string;
-    startDate?: Date;
-    endDate?: Date;
+    customerId: string;
+    term: ContractTerm,
     paymentTerms?: string;
     paymentMethod?: PaymentMethod;
     billingMethod?: BillingMethod;

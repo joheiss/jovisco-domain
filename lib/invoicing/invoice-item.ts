@@ -1,101 +1,67 @@
 import {TransactionItem} from './transaction';
 import {InvoiceItemData} from './invoice-data.model';
+import {ContractItem} from './contract-item';
 
 export class InvoiceItem extends TransactionItem {
 
-    protected _contractItemId: number | undefined;
-    protected _description: string | undefined;
-    protected _quantity: number | undefined;
-    protected _quantityUnit: string | undefined;
-    protected _pricePerUnit: number | undefined;
-    protected _cashDiscountAllowed: boolean | undefined;
-    protected _vatPercentage: number | undefined;
-
-    static createFromData(data: InvoiceItemData): InvoiceItem {
-        return new InvoiceItem(data);
-    }
-
     static defaultValues(): any {
         return {
-            contractItemId: 0,
             quantity: 0,
-            pricePerUnit: 0
+            pricePerUnit: 0,
+            cashDiscountAllowed: false
         } as InvoiceItemData;
     }
 
-    constructor(data?: InvoiceItemData) {
-        super();
-        this.initialize();
-        this.fill(data);
+    constructor(protected _data: InvoiceItemData) {
+        super(_data);
+        this.fill(_data);
     }
 
-    get contractItemId(): number {
-        return this._contractItemId || 0;
+    get contractItemId(): number | undefined {
+        return this._data.contractItemId;
     }
-
-    set contractItemId(value: number) {
-        this._contractItemId = value;
+    set contractItemId(value: number | undefined) {
+        this._data.contractItemId = value;
     }
-
-    get description(): string {
-        return this._description || '';
+    get description(): string | undefined {
+        return this._data.description;
     }
-
-    set description(value: string) {
-        this._description = value;
+    set description(value: string | undefined) {
+        this._data.description = value;
     }
-
-    get quantity(): number {
-        return this._quantity || 0;
+    get quantity(): number | undefined {
+        return this._data.quantity;
     }
-
-    set quantity(value: number) {
-        this._quantity = value;
+    set quantity(value: number | undefined) {
+        this._data.quantity = value;
     }
-
-    get quantityUnit(): string {
-        return this._quantityUnit || '';
+    get quantityUnit(): string | undefined {
+        return this._data.quantityUnit;
     }
-
-    set quantityUnit(value: string) {
-        this._quantityUnit = value;
+    set quantityUnit(value: string | undefined) {
+        this._data.quantityUnit = value;
     }
-
-    get pricePerUnit(): number {
-        return this._pricePerUnit || 0;
+    get pricePerUnit(): number  | undefined {
+        return this._data.pricePerUnit;
     }
-
-    set pricePerUnit(value: number) {
-        this._pricePerUnit = value;
+    set pricePerUnit(value: number | undefined) {
+        this._data.pricePerUnit = value;
     }
-
-    get cashDiscountAllowed(): boolean {
-        return this._cashDiscountAllowed || false;
+    get cashDiscountAllowed(): boolean  | undefined {
+        return this._data.cashDiscountAllowed;
     }
-
-    set cashDiscountAllowed(value: boolean) {
-        this._cashDiscountAllowed = value;
+    set cashDiscountAllowed(value: boolean | undefined) {
+        this._data.cashDiscountAllowed = value;
     }
-
     get vatPercentage(): number {
-        return this._vatPercentage || 0;
+        return this._data.vatPercentage || 0;
     }
-
     set vatPercentage(value: number) {
-        this._vatPercentage = value;
+        this._data.vatPercentage = value;
     }
 
     get data(): InvoiceItemData {
-        return {
-            id: this.id,
-            contractItemId: this.contractItemId,
-            description: this.description,
-            quantity: this.quantity,
-            quantityUnit: this.quantityUnit,
-            pricePerUnit: this.pricePerUnit,
-            cashDiscountAllowed: this.cashDiscountAllowed,
-            vatPercentage: this.vatPercentage
-        };
+        return this._data;
     }
 
     get discountableValue(): number {
@@ -107,11 +73,11 @@ export class InvoiceItem extends TransactionItem {
     }
 
     get netValue(): number {
-        return this.quantity * this.pricePerUnit;
+        return this.quantity && this.pricePerUnit ? this.quantity * this.pricePerUnit : 0;
     }
 
     get vatValue(): number {
-        return this.netValue * this.vatPercentage / 100;
+        return this.vatPercentage ? this.netValue * this.vatPercentage / 100 : 0;
     }
 
     getCashDiscountValue(cashDiscountPercentage: number): number {
@@ -129,45 +95,15 @@ export class InvoiceItem extends TransactionItem {
         return this.grossValue - this.getCashDiscountValue(cashDiscountPercentage);
     }
 
-    protected fill(data?: InvoiceItemData) {
-        if (!data) {
-            return;
-        }
-        if (data.id) {
-            this._id = data.id;
-        }
-        if (data.contractItemId) {
-            this._contractItemId = data.contractItemId;
-        }
-        if (data.description) {
-            this._description = data.description;
-        }
-        if (data.quantity) {
-            this._quantity = data.quantity;
-        }
-        if (data.quantityUnit) {
-            this._quantityUnit = data.quantityUnit;
-        }
-        if (data.pricePerUnit) {
-            this._pricePerUnit = data.pricePerUnit;
-        }
-        if (data.cashDiscountAllowed) {
-            this._cashDiscountAllowed = data.cashDiscountAllowed;
-        }
-        if (data.vatPercentage) {
-            this._vatPercentage = data.vatPercentage;
-        }
+    setItemDataFromContractItem(contractItem: ContractItem): void {
+        this._data.description = contractItem.description;
+        this._data.quantityUnit = contractItem.priceUnit;
+        this._data.pricePerUnit = contractItem.pricePerUnit;
+        this._data.cashDiscountAllowed = contractItem.cashDiscountAllowed;
     }
 
-    protected initialize() {
-        this._id = undefined;
-        this._contractItemId = undefined;
-        this._description = undefined;
-        this._quantity = 0;
-        this._quantityUnit = undefined;
-        this._pricePerUnit = 0;
-        this._cashDiscountAllowed = false;
-        this._vatPercentage = 19.0;
+    protected fill(data: InvoiceItemData) {
+        this._data = Object.assign({}, InvoiceItem.defaultValues(), data);
     }
 }
 
