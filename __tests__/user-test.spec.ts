@@ -1,4 +1,5 @@
 import {User} from '../lib/user';
+import {UserFactory} from '../lib/user/user-factory';
 
 describe('user tests', () => {
     it('should create a user', () => {
@@ -19,5 +20,5 @@ const mockUser = (): User => {
         uid: '0pOtTfuTelN0XmMMlE48OBAqzUG3'
     };
 
-    return User.createFromData(data);
+    return UserFactory.fromData(data);
 };

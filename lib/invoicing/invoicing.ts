@@ -3,10 +3,11 @@ import {Invoice} from './invoice';
 import {InvoiceData} from './invoice-data.model';
 import {DateTime} from 'luxon';
 import {InvoiceStatus} from './invoice-status.model';
+import {InvoiceFactory} from './invoice-factory';
 
 export class Invoicing {
 
-    public static createInvoiceFromContract(
+   static createInvoiceFromContract(
         contract: Contract,
         billingPeriod: string,
         quantity: number,
@@ -45,6 +46,6 @@ export class Invoicing {
                 }
             ]
         };
-        return Invoice.createFromData(data);
+        return InvoiceFactory.fromData(data);
     }
 }

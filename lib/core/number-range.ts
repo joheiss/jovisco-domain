@@ -2,12 +2,6 @@ import {NumberRangeData} from './number-range-data.model';
 
 export class NumberRange {
 
-    public static createFromData(data: NumberRangeData): NumberRange {
-        if (!data) {
-            throw new Error('invalid input');
-        }
-        return new NumberRange(data);
-    }
     constructor(private data: NumberRangeData) {
     }
 
@@ -32,6 +26,6 @@ export class NumberRange {
         if (!this.lastUsedId) {
             return this.startAtId;
         }
-        return +this.lastUsedId >= +this.startAtId ? (+this.lastUsedId + 1).toString() : (this.startAtId);
+        return +this.lastUsedId >= +this.startAtId ? (+this.lastUsedId + 1).toString() : this.startAtId;
     }
 }

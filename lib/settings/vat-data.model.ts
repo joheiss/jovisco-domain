@@ -1,4 +1,4 @@
-export interface Vat {
+export interface VatData {
     taxCode: string;
     validFrom: Date;
     validTo: Date;

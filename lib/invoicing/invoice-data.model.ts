@@ -4,12 +4,12 @@ import {PaymentMethod} from './payment-method.model';
 import {InvoiceStatus} from './invoice-status.model';
 
 export interface InvoiceData extends InvoiceHeaderData {
-    items?: InvoiceItemData[];
+    items: InvoiceItemData[];
 }
 
 export interface InvoiceHeaderData extends TransactionHeaderData {
     status?: InvoiceStatus;
-    receiverId?: string;
+    receiverId: string;
     contractId?: string;
     billingMethod?: BillingMethod;
     billingPeriod?: string;
