@@ -44,14 +44,14 @@ export class Invoice extends Transaction {
         return this.items.reduce(
             (sum, item) =>
                 sum + item.getCashDiscountValue(this.cashDiscountPercentage),
-            0
+            0,
         );
     }
 
     get cashDiscountBaseAmount(): number {
         return this.items.reduce(
             (sum, item) => sum + item.discountableValue,
-            0
+            0,
         );
     }
 
@@ -70,7 +70,7 @@ export class Invoice extends Transaction {
         return this.items.reduce(
             (sum, item) =>
                 sum + item.getDiscountedNetValue(this.cashDiscountPercentage),
-            0
+            0,
         );
     }
 
@@ -93,7 +93,7 @@ export class Invoice extends Transaction {
         return this.items.reduce(
             (sum, item) =>
                 sum + item.getDiscountedValue(this.cashDiscountPercentage),
-            0
+            0,
         );
     }
 
@@ -102,9 +102,7 @@ export class Invoice extends Transaction {
             ? DateTime.fromJSDate(this.header.issuedAt)
             : DateTime.fromJSDate(DateUtility.getCurrentDate());
 
-        if (issuedAt.day > 15) {
-            return { year: issuedAt.year, month: issuedAt.month };
-        }
+        if (issuedAt.day > 15) return { year: issuedAt.year, month: issuedAt.month };
         const previousMonth = issuedAt.minus({ months: 1 });
         return { year: previousMonth.year, month: previousMonth.month };
     }
@@ -159,11 +157,9 @@ export class Invoice extends Transaction {
             this.items.forEach((item: InvoiceItem) => {
                 if (item.contractItemId) {
                     const contractItem: ContractItem = contract.getItem(
-                        item.contractItemId
+                        item.contractItemId,
                     );
-                    if (contractItem) {
-                        item.setItemDataFromContractItem(contractItem);
-                    }
+                    if (contractItem) item.setItemDataFromContractItem(contractItem);
                 }
             });
         } else {
@@ -190,8 +186,7 @@ export class Invoice extends Transaction {
         this.header.billingMethod = contract.header.billingMethod;
         this.header.paymentMethod = contract.header.paymentMethod;
         this.header.paymentTerms = contract.header.paymentTerms;
-        this.header.cashDiscountPercentage =
-            contract.header.cashDiscountPercentage;
+        this.header.cashDiscountPercentage = contract.header.cashDiscountPercentage;
         this.header.cashDiscountDays = contract.header.cashDiscountDays;
         this.header.dueInDays = contract.header.dueDays;
         this.header.invoiceText = contract.header.invoiceText;

@@ -10,9 +10,7 @@ export type ContractSummariesData = { [id: string]: ContractSummaryData };
 export class ContractSummariesFactory {
 
     static fromEntities(receivers: ReceiversEntity, contracts: ContractsEntity, invoices: InvoicesEntity): ContractSummariesData {
-
         const summaries = {} as ContractSummariesData;
-
         Object.keys(contracts).forEach(contractId => {
             summaries[contractId] = ContractSummaryFactory
                 .fromContract(ContractFactory.fromData(contracts[contractId]))

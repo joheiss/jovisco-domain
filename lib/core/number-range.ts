@@ -20,12 +20,8 @@ export class NumberRange {
     }
 
     get nextId(): string | undefined {
-        if (!this.startAtId) {
-            return undefined;
-        }
-        if (!this.lastUsedId) {
-            return this.startAtId;
-        }
+        if (!this.startAtId) return undefined;
+        if (!this.lastUsedId) return this.startAtId;
         return +this.lastUsedId >= +this.startAtId ? (+this.lastUsedId + 1).toString() : this.startAtId;
     }
 }

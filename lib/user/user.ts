@@ -11,17 +11,10 @@ export class User {
 
     private _data: UserData;
     constructor(data: UserData) {
-
         const defaultValues = User.defaultValues();
-
         this._data = { ...data };
-
-        if (this._data.isLocked === undefined) {
-            this._data.isLocked = defaultValues.isLocked;
-        }
-        if (!this._data.roles) {
-            this._data.roles = defaultValues.roles;
-        }
+        if (this._data.isLocked === undefined) this._data.isLocked = defaultValues.isLocked;
+        if (!this._data.roles) this._data.roles = defaultValues.roles;
     }
 
     get uid(): string  | undefined {

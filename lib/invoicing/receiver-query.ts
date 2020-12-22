@@ -6,8 +6,7 @@ import {DocumentLink} from '../documents';
 
 export class ReceiverQuery {
 
-    constructor(private receiver: Receiver) {
-    }
+    constructor(private receiver: Receiver) {}
 
     getContracts(contracts: Contract[]): Contract[] {
         return contracts.filter(contract => contract.header.customerId === this.receiver.header.id)
@@ -23,9 +22,7 @@ export class ReceiverQuery {
 
     getLastInvoice(invoices: Invoice[]): Invoice {
         return this.getInvoices(invoices).reduce((last, curr) => {
-            if (last && last.header.id && curr.header.id && last.header.id >= curr.header.id) {
-                return last;
-            }
+            if (last?.header.id && curr.header.id && last.header.id >= curr.header.id) return last;
             return curr;
         });
     }

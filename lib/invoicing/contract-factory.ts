@@ -1,15 +1,12 @@
-import {ContractData, ContractHeaderData, ContractItemData} from './contract-data.model';
+import {ContractData, ContractHeaderData} from './contract-data.model';
 import {Contract} from './contract';
-import {ContractItem} from './contract-item';
 import {ContractItemFactory} from './contract-item-factory';
 import {ContractsEntity} from './contracts-entity';
 
 export class ContractFactory {
 
     static fromData(data: ContractData): Contract {
-        if (!data) {
-            throw new Error('invalid input');
-        }
+        if (!data) throw new Error('invalid input');
         const header = ContractFactory.extractHeaderFromData(data);
         const items = data.items ? ContractItemFactory.fromDataArray(data.items) : [];
         return new Contract(header, items);

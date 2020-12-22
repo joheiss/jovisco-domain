@@ -5,7 +5,6 @@ import {InvoiceSummary} from './invoice-summary';
 export class InvoiceSummaryFactory {
 
     static fromInvoice(invoice: Invoice): InvoiceSummary {
-
         const data = {
             object: invoice,
             receiverName: '',

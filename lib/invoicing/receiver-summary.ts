@@ -7,8 +7,7 @@ import {InvoiceFactory} from './invoice-factory';
 
 export class ReceiverSummary {
 
-    constructor(private _data: ReceiverSummaryData) {
-    }
+    constructor(private _data: ReceiverSummaryData) {}
 
     get object(): Receiver {
         return this._data.object;
@@ -48,7 +47,6 @@ export class ReceiverSummary {
     }
 
     setContractInfos(contracts: ContractsEntity): ReceiverSummary {
-
         Object.keys(contracts)
             .filter(contractId => contracts[contractId].customerId === this._data.object.header.id)
             .forEach(contractId => {
@@ -64,29 +62,22 @@ export class ReceiverSummary {
                     this._data.lastContractId = contractId;
                 }
             });
-
         return this;
     }
 
     setInvoiceInfos(invoices: InvoicesEntity): ReceiverSummary {
-
         Object.keys(invoices)
             .filter(invoiceId => invoices[invoiceId].receiverId === this._data.object.header.id)
             .forEach(invoiceId => {
                 const invoice = InvoiceFactory.fromData(invoices[invoiceId]);
                 // get counts for open and due invoices
-                if (invoice.isDue()) {
-                    this._data.dueInvoicesCount++;
-                }
-                if (invoice.isOpen()) {
-                    this._data.openInvoicesCount++;
-                }
+                if (invoice.isDue()) this._data.dueInvoicesCount++;
+                if (invoice.isOpen()) this._data.openInvoicesCount++;
                 // get last invoice Id
                 if (invoiceId > this._data.lastInvoiceId) {
                     this._data.lastInvoiceId = invoiceId;
                 }
             });
-
         return this;
     }
 }

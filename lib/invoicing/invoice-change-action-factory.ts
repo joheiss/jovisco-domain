@@ -19,10 +19,7 @@ export class InvoiceChangeActionFactory {
 
   private determineChanges(): InvoiceChange[] {
     const differences = difference(this.changed.data, this.current);
-    console.log('differences: ', differences);
-    if (Object.keys(differences).length === 0) {
-      return [] as InvoiceChange[];
-    }
+    if (Object.keys(differences).length === 0) return [] as InvoiceChange[];
     return this.flattenChanges(differences);
   }
 

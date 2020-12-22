@@ -19,9 +19,7 @@ export abstract class Transaction extends BusinessObject{
     }
 
     getNextItemId(): number {
-        if (this.items.length === 0) {
-            return 1;
-        }
+        if (this.items.length === 0) return 1;
         let ids: any[] = [], gaps: any[] = [];
         // get ids
         ids = this.items.map(item => item.data.id).sort();

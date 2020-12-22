@@ -10,9 +10,7 @@ export type ReceiverSummariesData = { [id: string]: ReceiverSummaryData };
 export class ReceiverSummariesFactory {
 
     static fromEntities(receivers: ReceiversEntity, contracts: ContractsEntity, invoices: InvoicesEntity): ReceiverSummariesData {
-
         const summaries = {} as ReceiverSummariesData;
-
         Object.keys(receivers).forEach(receiverId => {
             summaries[receiverId] = ReceiverSummaryFactory
                 .fromReceiver(ReceiverFactory.fromData(receivers[receiverId]))

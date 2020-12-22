@@ -16,9 +16,7 @@ export class ContractQuery {
 
     getLastInvoice(invoices: Invoice[]): Invoice {
         return this.getInvoices(invoices).reduce((last, curr) => {
-            if (last && last.header.id && curr.header.id && last.header.id >= curr.header.id) {
-                return last;
-            }
+            if (last?.header.id && curr.header.id && last.header.id >= curr.header.id) return last;
             return curr;
         });
     }

@@ -38,11 +38,8 @@ export class InvoiceFactory {
     }
 
     static fromData(data: InvoiceData): Invoice {
-        if (!data) {
-            throw new Error('invalid input');
-        }
+        if (!data) throw new Error('invalid input');
         const header = InvoiceFactory.extractHeaderFromData(data);
-        // console.log('header: ', header);
         const items = data.items
             ? InvoiceItemFactory.fromDataArray(data.items)
             : [];
@@ -59,19 +56,12 @@ export class InvoiceFactory {
         );
     }
 
-    protected static extractHeaderFromData(
-        data: InvoiceData
-    ): InvoiceHeaderData {
-        // console.log('extract header - data: ', data);
+    protected static extractHeaderFromData(data: InvoiceData): InvoiceHeaderData {
         const { items: removed1, ...header } = data;
-        // console.log('extract header: ', header);
-        // const result = Object.assign({}, Invoice.defaultValues(), header) as InvoiceHeaderData;
-        const result = Object.assign(
+        return Object.assign(
             {},
             { ...Invoice.defaultValues() },
             { ...header }
         ) as InvoiceHeaderData;
-        // console.log('extract header - result ', result);
-        return result;
     }
 }

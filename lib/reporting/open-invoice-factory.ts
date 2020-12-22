@@ -13,7 +13,6 @@ export class OpenInvoiceFactory {
     }
 
     static fromInvoice(invoice: Invoice, receiverName: string): OpenInvoice {
-
         const data = {
             id: invoice.header.id,
             issuedAt: invoice.header.issuedAt,
@@ -24,7 +23,6 @@ export class OpenInvoiceFactory {
             paymentAmount: invoice.paymentAmount,
             dueDate: invoice.dueDate
         } as OpenInvoiceData;
-
         return OpenInvoiceFactory.fromData(data);
     }
 }

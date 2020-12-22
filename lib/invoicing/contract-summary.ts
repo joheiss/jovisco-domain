@@ -6,8 +6,7 @@ import {InvoiceFactory} from './invoice-factory';
 
 export class ContractSummary {
 
-    constructor(private _data: ContractSummaryData) {
-    }
+    constructor(private _data: ContractSummaryData) {}
 
     get object(): Contract {
         return this._data.object;
@@ -49,9 +48,7 @@ export class ContractSummary {
                 // calculate revenue
                 this._data.revenue = this._data.revenue + invoice.netValue;
                 // get last invoice Id
-                if (invoiceId > this._data.lastInvoiceId) {
-                    this._data.lastInvoiceId = invoiceId;
-                }
+                if (invoiceId > this._data.lastInvoiceId) this._data.lastInvoiceId = invoiceId;
             });
 
         return this;
