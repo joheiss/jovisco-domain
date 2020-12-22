@@ -20,12 +20,8 @@ export class DocumentLink {
     constructor(data: DocumentLinkData) {
         const defaultValues = DocumentLink.defaultValues();
         this._data = { ... data };
-        if (this._data.attachToEmail === undefined) {
-            this._data.attachToEmail = defaultValues.attachToEmail;
-        }
-        if (this._data.type === undefined) {
-            this._data.type = defaultValues.type;
-        }
+        if (this._data.attachToEmail === undefined) this._data.attachToEmail = defaultValues.attachToEmail;
+        if (this._data.type === undefined) this._data.type = defaultValues.type;
     }
 
     get data(): DocumentLinkData {
@@ -72,9 +68,7 @@ export class DocumentLink {
 
     get objectType(): string | undefined {
         const split = this.owner ? this.owner.split('/') : [];
-        if (split.length !== 2) {
-            return undefined;
-        }
+        if (split.length !== 2) return undefined;
         return split[0];
     }
 }

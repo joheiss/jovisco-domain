@@ -5,9 +5,7 @@ import {ReceiversEntity} from './receivers-entity';
 export class ReceiverFactory {
 
     static fromData(data: ReceiverData) {
-        if (!data) {
-            throw new Error('invalid input');
-        }
+        if (!data) throw new Error('invalid input');
         const header = ReceiverFactory.extractHeaderFromData(data);
         const address = ReceiverFactory.extractAddressFromData(data);
         return new Receiver(header, address);

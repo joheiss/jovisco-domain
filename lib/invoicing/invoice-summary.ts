@@ -4,8 +4,7 @@ import {InvoiceSummaryData} from './invoice-summary-data.model';
 
 export class InvoiceSummary {
 
-    constructor(private _data: InvoiceSummaryData) {
-    }
+    constructor(private _data: InvoiceSummaryData) {}
 
     get object(): Invoice {
         return this._data.object;

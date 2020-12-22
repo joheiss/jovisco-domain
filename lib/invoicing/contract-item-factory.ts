@@ -8,9 +8,7 @@ export class ContractItemFactory {
     }
 
     static fromDataArray(items: ContractItemData[]): ContractItem[] {
-
         if (!items.length) return [];
-
         return items
             .filter(item => !!item)
             .map(item => ContractItemFactory.fromData(item));

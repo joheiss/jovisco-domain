@@ -5,16 +5,13 @@ import {DateTime} from 'luxon';
 export class Revenue {
 
     static calculateTotalRevenuesPerYear(revenues: Revenue[]): RevenuePerYearData[] {
-
         const revenueMatrix = Revenue.initializeRevenuePerYear();
-
         revenues.map(r => {
             const i = Revenue.calculateIndexOfRevenueYear(+r.year);
             revenueMatrix[i].revenuePerYear = r.totalRevenue;
             r.revenueInMonths.map((m, j) => revenueMatrix[i].revenuePerMonth[j] = m);
             return revenueMatrix;
         });
-
         return revenueMatrix;
     }
 
@@ -32,9 +29,7 @@ export class Revenue {
     }
 
     private static initializeRevenuePerYear(): RevenuePerYearData[] {
-
         const revenuesPerYear = [] as RevenuePerYearData[];
-
         for (let i = 0; i < 3; i++) {
             const revenuePerYear: RevenuePerYearData = {
                 year: DateTime.local().year - i,
@@ -46,8 +41,7 @@ export class Revenue {
         return revenuesPerYear;
     }
 
-    constructor(private data: RevenueData) {
-    }
+    constructor(private data: RevenueData) {}
 
     get year(): string {
         return this.data.id || '';
@@ -68,9 +62,7 @@ export class Revenue {
     }
 
     getTotalRevenueInMonth(month: string): number {
-        if (!this.data.months[month]) {
-            return 0;
-        }
+        if (!this.data.months[month]) return 0;
         let total = 0;
         Object.keys(this.data.months[month]).forEach(receiver => total = total + this.data.months[month][receiver]);
         return total;
@@ -85,10 +77,8 @@ export class Revenue {
     }
 
     getTotalRevenueInMonthForReceiver(receiver: string, month: string): number {
+        if (!this.data.months[month]) return 0;
         let total = 0;
-        if (!this.data.months[month]) {
-            return 0;
-        }
         Object.keys(this.data.months[month])
             .filter(recv => recv === receiver)
             .forEach(recv => total = total + this.data.months[month][recv] || 0);

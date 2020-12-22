@@ -5,9 +5,7 @@ import {UsersEntity} from './users-entity';
 export class UserFactory {
 
     static fromData(data: UserData): User {
-        if (!data) {
-            throw new Error('invalid input');
-        }
+        if (!data) throw new Error('invalid input');
         return new User(data);
     }
 
@@ -18,6 +16,5 @@ export class UserFactory {
     static fromEntity(entity: UsersEntity): User[] {
         return Object.keys(entity).map(id => UserFactory.fromData(entity[id]));
     }
-
 
 }
